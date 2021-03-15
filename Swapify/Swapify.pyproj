@@ -40,6 +40,7 @@
     <Folder Include="Swapify\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="README.txt" />
     <Content Include="requirements.txt" />
     <Content Include="Swapify\static\content\bootstrap.css" />
     <Content Include="Swapify\static\content\bootstrap.min.css" />
