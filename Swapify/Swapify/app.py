@@ -3,6 +3,13 @@ import os
 from flask import Flask, render_template, request
 import sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
+
+os.environ['DBUSER'] = 'usxuxwby' 
+os.environ['DBPASS'] = 'sVUyUo4Z1aqH4MiKkLQtWlw8RNMhaq-H'
+os.environ['DBHOST'] = 'queenie.db.elephantsql.com'
+os.environ['DBNAME'] = 'usxuxwby'
 
 database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.format(
     dbuser=os.environ['DBUSER'],
@@ -19,8 +26,14 @@ app.config.update(
 )
 
 # initialize the database connection
-db = sqlalchemy(app)
+db = SQLAlchemy(app)
 
+from Swapify.models.artist import Artist
+
+migrate = Migrate(app, db)
+manager = Manager(app)
+
+manager.add_command('db', MigrateCommand)
 
 # @app.route('/')
 # def view_registered_weathers():
