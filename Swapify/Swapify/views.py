@@ -16,22 +16,32 @@ def home():
         year=datetime.now().year,
     )
 
-@app.route('/contact')
-def contact():
-    """Renders the contact page."""
-    return render_template(
-        'contact.html',
-        title='Contact',
-        year=datetime.now().year,
-        message='Your contact page. This message is in views.py'
-    )
-
 @app.route('/about')
 def about():
-    """Renders the about page."""
+    """Renders the mood page."""
     return render_template(
         'about.html',
-        title='About',
+        title='Mood Page',
         year=datetime.now().year,
-        message='Your application description page.'
+        message='Attach a mood to this song!'
+    )
+
+@app.route('/contact')
+def contact():
+    """Renders the playlist page."""
+    return render_template(
+        'contact.html',
+        title='Playlists Page',
+        year=datetime.now().year,
+        message='Your playlist page. This message is in views.py'
+    )
+
+@app.route('/profile')
+def profile():
+    """Renders the profile page."""
+    return render_template(
+        'profile.html',
+        title='Profile Page',
+        year=datetime.now().year,
+        message='Settings'
     )

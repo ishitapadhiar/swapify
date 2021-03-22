@@ -67,6 +67,7 @@
     <Content Include="Swapify\templates\about.html" />
     <Content Include="Swapify\templates\contact.html" />
     <Content Include="Swapify\templates\index.html" />
+    <Content Include="Swapify\templates\profile.html" />
     <Content Include="Swapify\templates\layout.html" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />

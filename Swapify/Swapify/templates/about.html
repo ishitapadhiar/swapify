@@ -1,9 +1,65 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-<h2>{{ title }}.</h2>
-<h3>{{ message }}</h3>
-
-<p>Use this area to provide additional information.</p>
+<main>
+    <div class="row">
+        <div class="col-md-12">
+            <div style="margin-top: -400px; margin-bottom: 20px; margin-left: auto; width: 40%;" class="row">
+                <input type="search" placeholder="Search..">
+            </div>
+            <br>
+            <div style="background:#42cef1; margin-top: 30px; margin-bottom:20px; height: 650px; width: 500px" class="row jumbotron">
+                <div style="margin-top: 20x; margin-left: 20px; height: 450px; width: 90%" class="row jumbotron">
+                    <h2 style="color: #5e6a6d; text-align: center;" >Spotify song cover photo here</h2>
+                    <img style="width: 350px; padding-bottom: 100px;"src="https://1000logos.net/wp-content/uploads/2017/08/Spotify-Logo.png" alt="Song image"/>
+                </div>
+                <div style="margin-top:-50px; margin-bottom: 30px; text-align: center;" class="container">
+                    <h1>Song Title</h1>
+                </div>
+                <div style="margin-top:-50px; text-align: center;" class="container">
+                    <h2>Artist</h2>
+                </div>
+                
+            </div>
+            <div style="background: #d658d6; margin-top: 10px; height:70px" class="row jumbotron">
+                <div class="col-md-6">
+                    <button style="margin-top: -25px; margin-bottom: 20px; margin-left: 30px;" class="btn-lg">
+                        <img style="width:50px;" src="https://cdn.fastly.picmonkey.com/content4/previews/arrows_2/arrows_2_44_550.png" alt="Play">
+                    </button>
+                </div>
+                <div class="col-md-6">
+                <button style="margin-top: -25px; margin-left: 40px;" class="btn-lg">
+                    <img style="width:50px" src="https://static.thenounproject.com/png/1384165-200.png" alt="Skip">
+                </button>
+                </div>
+            </div>
+            <div style="height:200px; width: 500px" class="row">
+                <div class="col-md-6">
+                    <button style="margin-left: 0px; height:100px; width: 200px;" class="btn-lg">
+                        <img style="width:70px;" src="https://i.pinimg.com/originals/b4/1f/87/b41f878be5ccaa5329d19d4dbebd14ed.png" alt="happy">
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button style="margin-left: 20px; height:100px; width: 200px;" class="btn-lg">
+                        <img style="width:70px" src="http://cdn.shopify.com/s/files/1/1061/1924/products/Sad_Face_Emoji_grande.png?v=1571606037" alt="sad">
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button style="margin-left: 0px; height:100px; width: 200px;" class="btn-lg">
+                        <img style="width:70px" src="https://i.pinimg.com/originals/31/14/8c/31148c886272e349b54448ac68d893c4.png" alt="angry">
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button style="margin-left: 20px; height:100px; width: 200px;" class="btn-lg">
+                        <img style="width:80px" src="https://emojis.wiki/emoji-pics/apple/relieved-face-apple.png" alt="calm">
+                    </button>
+                </div>
+                <!-- <button class="btn-lg">emoji 1</button>
+                <button class="btn-lg">emoji 2</button>
+                <button class="btn-lg">emoji 3</button>
+                <button class="btn-lg">emoji 4</button> -->
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}
