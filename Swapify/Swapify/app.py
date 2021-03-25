@@ -29,6 +29,9 @@ app.config.update(
 db = SQLAlchemy(app)
 
 from Swapify.models.artist import Artist
+from Swapify.models.allmodels import User
+from Swapify.models.allmodels import Playlist
+from Swapify.models.allmodels import Song
 
 migrate = Migrate(app, db)
 manager = Manager(app)
