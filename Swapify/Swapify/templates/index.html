@@ -1,39 +1,310 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<script src="/static/templates/popper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"> </script>
 <main>
+<style>
+@import url('https://fonts.googleapis.com/css?family=Open Sans:400,700|Montserrat');
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat';
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+#tabs {
+  width: 700px;
+  display: flex;
+  position: relative;
+  margin: 0 auto;
+  margin-top: 50px;
+  height: auto;
+  min-height: 200px;
+  max-height: 600px;
+  overflow: hidden;
+}
+
+ul {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  vertical-align: top;
+  width: 50%;
+}
+
+ul li a {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-decoration: none;
+  color: #3b3b3b;
+  border-top: solid 2px #e9e9e9;
+  padding: 20px 5px;
+  z-index: 1;
+  opacity: .5;
+  -webkit-transition: 0.3s ease;
+  -moz-transition: 0.3s ease;
+  -o-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
+ul li:focus, a:focus {
+  outline: none;
+}
+
+ul li:nth-child(1) a {
+  border-top: none;
+}
+
+ul li a.active {
+  opacity: 1;
+}
+
+.para-a {
+  font-weight: bold;
+  margin-top: 10px;
+  padding: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
+  border: none;
+  font-family: 'Montserrat';
+  color: #2b2b2b;
+}
+
+.tag {
+  position: relative;
+  width: 100%;
+}
+
+.icon {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: #c7c7c7;
+  border-radius: 100%;
+  vertical-align: middle;
+}
+
+.block {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  border: solid 2px #7b7b7b;
+  border-radius: 5px;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.circle {
+  position: absolute;
+  padding: 2px;
+  border: solid 2px #7b7b7b;
+  border-radius: 100%;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.title {
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 0 10px;
+  vertical-align: middle;
+  color: #7b7b7b;
+}
+
+.addon {
+  position: relative;
+  width: 80%;
+  top: -25px;
+  margin-left: 70px;
+  letter-spacing: 0;
+  font-size: 13px;
+  color: #9b9b9b;
+  opacity: 0;
+  font-family: 'Open Sans';
+}
+
+.addon.fadein {
+  opacity: 1;
+}
+
+.browser {
+  width: 45%;
+  height: 95%;
+  position: absolute;
+  border-style: solid;
+  border-width: 2px 0 2px 2px;
+  border-color: #7b7b7b transparent #7b7b7b #7b7b7b;
+  right: 0;
+  border-radius: 10px 0 0 10px;
+  overflow: hidden;
+}
+
+.top-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  background: #fff;
+  border-bottom: solid 2px #7b7b7b;
+  z-index: 2;
+}
+
+.dot {
+  position: relative;
+  display: inline-block;
+  padding: 4px;
+  background: #c7c7c7;
+  border-radius: 100%;
+}
+
+.dot:nth-child(1) {
+  margin-left: 7px;
+}
+
+#tabs-1, #tabs-2, #tabs-3 {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#tabs-1 {
+  background: url("/static/templates/mood.png");
+  background-position: center center;
+  background-repeat: no-repeat;
+  /*#9b9b9b;*/
+}
+
+#tabs-2 {
+  background: #c9c9c9;
+}
+
+#tabs-3 {
+  background: #1b1b1b;
+}
+</style>
+
 	<div style="padding-top: 450px">
 	</div>
 <div style="background:#DC51BC; padding-top:10px; margin-left: 80px; margin-right: 80px; margin-bottom: 100px" class="jumbotron">
-    <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700">Connect to Spotify</h1>
-
     <div class="col text-center">
-    <button style="font-family: 'Montserrat', sans-serif; font-weight: 700" class = "btn btn-outline-info btn-large">Login</button>
-
-<!--     </div>
-    <p><a style="font-family: 'Montserrat', sans-serif; font-weight: 700" class="btn btn-outline-info btn-large">Login &raquo;</a></p>
-</div> -->
-
-<!-- <div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
+        <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700">Welcome</h1>
         <p>
-            Flask gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
+            You have successfully logged in and may start using Swapify.
         </p>
-        <p><a class="btn btn-default" href="http://flask.pocoo.org/docs/">Learn more &raquo;</a></p>
     </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>The Python Package Index is a repository of software for the Python programming language.</p>
-        <p><a class="btn btn-default" href="https://pypi.python.org/pypi">Learn more &raquo;</a></p>
+
+</div>
+
+<div id="tabs" style="padding-bottom: 450px">
+  <ul id="accordion">
+    <li>
+      <a class="active" href="#tabs-1">   <div class="tag">
+          <div class="icon">
+            <div class="block">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <span class="title">Feature One: Mood Match</span>
+        </div>
+      </a>
+        <div class="addon fadein">
+          <span>
+            The Mood Match page consists of you selecting which emoji you want to attach to the specific song that is currently playing. There are four emojis that you can choose from. Simply tap the emojis to attach the song to that playlist.
+          </span>
+          <a class="para-a" href="#">Learn More</a>
+        </div>
+    </li>
+    <li>
+      <a href="#tabs-2">   <div class="tag">
+          <div class="icon">
+            <div class="block">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <span class="title">Feature Two: Playlists</span>
+        </div>
+      </a>
+        <div class="addon">
+          <span>
+            The playlist page allows you to search through your automatically made playlists based on the data you have provided us using the Mood Match Page.
+          </span>
+        </div>
+    </li>
+    <li>
+      <a href="#tabs-3">   <div class="tag">
+          <div class="icon">
+            <div class="block">
+              <div class="circle"></div>
+            </div>
+          </div>
+          <span class="title">Feature Three: Profile</span>
+        </div>
+      </a>
+        <div class="addon">
+          <span>
+            This is your profile page, you are able to log out, look for friends, and check out your settings.
+          </span>
+        </div>
+    </li>
+  </ul>
+  <div class="browser">
+    <div class="top-bar">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
     </div>
-    <div class="col-md-4">
-        <h2>Microsoft Azure</h2>
-        <p>You can easily publish to Microsoft Azure using Visual Studio. Find out how you can host your application using a free trial today.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
-    </div>
-</div> -->
+    <div id="tabs-1"></div>
+    <div id="tabs-2"></div>
+    <div id="tabs-3"></div>
+  </div>
+</div>
+
+<script>
+    $(function() {
+  $("#tabs").tabs({
+    show: { effect: "blind", direction: "right", duration: 300 }
+  });
+  $( "#accordion" ).accordion();
+
+  var btn = $('#accordion li a');
+  var wrapper = $('#accordion li');
+
+  $(btn).on('click', function() {
+    $(btn).removeClass('active');
+    $(btn).parent().find('.addon').removeClass('fadein');
+    
+    $(this).addClass('active');
+    $(this).parent().find('.addon').addClass('fadein');
+  });
+});
+</script>
+
+
+
 </main>
+
 {% endblock %}

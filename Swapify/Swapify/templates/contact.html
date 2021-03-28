@@ -2,21 +2,95 @@
 
 {% block content %}
 
-<h2>{{ title }}.</h2>
+<!-- <h2>{{ title }}.</h2>
 <h3>{{ message }}</h3>
+ -->
+ <style>
+@import url('https://fonts.googleapis.com/css?family=Open Sans:400,700|Montserrat');
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Montserrat';
+  font-size: 13px;
+  letter-spacing: 1px;
+}
 
+ </style>
 
-<p>Use this area to provide additional information.</p>
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<main>
+ <body>
+ 	<h1 style="padding-top: 500px;">
+ 		Your Playlists
+ 	</h1>
+ 	 	<h2 style="padding-top: 50px;">
+ 		Happy
+ 	</h2>
+ 		<table class="table">
+  <thead class="thead-inverse">
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
+<h2>
+	Sad
+</h2>
+<table class="table">
+  <thead class="thead-default">
+    <tr>
+      <th>#</th>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">1</th>
+      <td>Mark</td>
+      <td>Otto</td>
+      <td>@mdo</td>
+    </tr>
+    <tr>
+      <th scope="row">2</th>
+      <td>Jacob</td>
+      <td>Thornton</td>
+      <td>@fat</td>
+    </tr>
+    <tr>
+      <th scope="row">3</th>
+      <td>Larry</td>
+      <td>the Bird</td>
+      <td>@twitter</td>
+    </tr>
+  </tbody>
+</table>
 
-<address>
-    <strong>Support:</strong>   <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+  
+</body>
+</main>
 
 {% endblock %}

@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="/static/templates/popper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"> </script>
     <meta charset="utf-8" />
     <link href="https://fonts.googleapis.com/css?family=Montserrat:700" rel="stylesheet">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>{{ title }} - My Flask Application</title>
+    <title>{{ title }} - My Swapify Application</title>
 <!--     <link rel="stylesheet" type="text/css" href="/static/content/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/content/site.css" /> -->
         <!-- Bootstrap core CSS -->
@@ -16,7 +19,7 @@
 <!--     <script src="/static/scripts/modernizr-2.6.2.js"></script> -->
 </head>
 
-<body>
+<body style="box-shadow: inset 0 0 0 rgba(0, 0, 0, .5)">
     <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
       <header class="masthead mb-auto mr-auto ml-auto">
         <div class="inner">
@@ -29,52 +32,21 @@
         </div>
       </header>
 
-      <main role="main" class="inner cover">
-
-        
-    <!--         <p class="lead">Cover is a one-page template for building simple
-    and beautiful home pages. Download, edit the text, and add your own 
-    fullscreen background photo to make it your own.</p>
-        <p class="lead">
-          <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-        </p> -->
-      </main>
-
-<!--     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">Application name</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('home') }}">Home</a></li>
-                    <li><a href="{{ url_for('about') }}">About</a></li>
-                    <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                </ul>
-            </div>
-        </div>
-    </div> -->
-<!-- 
-    <div class="container body-content"> -->
         {% block content %}{% endblock %}
-        <hr />
-<!--         <footer>
-            <p>&copy; {{ year }} - My Flask Application</p>
-        </footer> -->
+
     </div>
     <script src="/static/templates/jquery-3.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
-    <script src="/static/templates/popper.js"></script>
+
+
 <!--     <script src="/static/templates/bootstrap.js"></script>
  -->  
     <script src="/static/scripts/jquery-1.10.2.js"></script>
 <!--     <script src="/static/scripts/bootstrap.js"></script> -->
     <script src="/static/scripts/respond.js"></script>
+        <script src="/static/templates/popper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"> </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"> </script>
     {% block scripts %}{% endblock %}
 
 </body>
