@@ -1,7 +1,9 @@
 // JavaScript source code
 
+//const { get } = require("jquery");
 
-const ACCESS_TOKEN
+const API_ENDPOINT = 'https://api.spotify.com/v1/me';
+let ACCESS_TOKEN;
 
 function getAccessToken() {
     const currentLocation = String(window.location).split('#')[1];
@@ -9,7 +11,7 @@ function getAccessToken() {
     return params;
 }
 function fetchProfileInformation() {
-    const currentQueryParameters = getCurrentQueryParameters();
+    const currentQueryParameters = getAccessToken();
     ACCESS_TOKEN = currentQueryParameters.get('access_token');
 
     const fetchOptions = {
@@ -23,16 +25,13 @@ function fetchProfileInformation() {
         return response.json();
     }).then(function (json) {
         console.log(json);
-        updateProfileInformation(json);
+        //updateProfileInformation(json);
     }).catch(function (error) {
         console.log(error);
     });
 }
-$.ajax({
-    url: 'https://api.spotify.com/v1/me',
-    headers: {
-        'Authorization': 'Bearer ' + ACCESS_TOKEN
-    },
-    success: function (response) {
-        alert('success!');
-   }
+$(function () {
+    x = getAccessToken();
+    fetchProfileInformation()
+    alert(x)
+});
