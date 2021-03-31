@@ -57,14 +57,17 @@ def log():
 
 
 
+
 @app.route('/home')
 def home():
+    testFriends()
+    print("friends tested")
     """Renders the home page."""
-    return render_template(
-        'index.html',
-        title='Home Page',
-        year=datetime.now().year,
-    )
+    # return render_template(
+    #     'index.html',
+    #     title='Home Page',
+    #     year=datetime.now().year,
+    # )
 
 @app.route('/about')
 def about():
@@ -95,16 +98,94 @@ def profile():
         year=datetime.now().year,
         message='Settings'
     )
+@app.route('/newUser', methods = ['POST'])
+def addUser(form):
+    # frontend, add form parsing here, you need to send first name, 
+    # last name and email to create a new user
+    u1 = User(first, last, email)
+    db.session.add(u1)
+    db.session.commit()
+    return u1
 
-# @app.route("/addartist", method = [Post])
-# def addartist():
-# 	return ourAddArtist(form.name)
+@app.route('/addFriend', methods=['POST'])
+def addFriend(form):
+    # frontend add form parsing here, get the email of the current user (u1_email) and the 
+    # user that they want to add as a friend (u2_email)
+    u1 = User.query.filter_by(email=u1_email).first()
+    u2 = User.query.filter_by(email=u2_email).first()
+    u1.friended.append(u2)
+    db.session.commit()
 
-# def ourAddArtist(name):
-# 	a1 = Artist("Selena Gomez")
-# 	db.session.add(a1)
-# 	db.session.commit()
-# 	return "done!"
+
+@app.route('/newSong', methods=['POST'])
+def addSong(form):
+    #frontend add form parsing here, you need a unique identifier from spotify (spotify_id)
+    s1 = Song(spotify_id)
+    db.session.add(s1)
+    db.session.commit()
+    return s1
+
+@app.route('/newPlaylist', methods=['POST'])
+def addPlaylist(form):
+    #frontend add form parsing you need playlist name, length and user_id
+    p1 = Playlist(name, length, user_id)
+    db.session.add(p1)
+    db.session.commit()
+    return p1
+
+@app.route('/addHappySong', methods=['POST'])
+def addHappySong(form):
+    #frontend add form parsing you need user email, and spotify_id for the song
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
+    if s1 is None:
+        s1 = Song(spotify_id)
+        db.session.add(s1)
+        db.session.commit()
+    
+    u1.happy_music.append(s1)
+    db.session.commit()
+
+@app.route('/addSadSong', methods=['POST'])
+def addSadSong(form):
+    #frontend add form parsing you need user email, and spotify_id for the song
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
+    if s1 is None:
+        s1 = Song(spotify_id)
+        db.session.add(s1)
+        db.session.commit()
+    
+    u1.sad_music.append(s1)
+    db.session.commit()
+
+@app.route('/addStudySong', methods=['POST'])
+def addStudySong(form):
+    #frontend add form parsing you need user email, and spotify_id for the song
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
+    if s1 is None:
+        s1 = Song(spotify_id)
+        db.session.add(s1)
+        db.session.commit()
+    
+    u1.study_music.append(s1)
+    db.session.commit()
+
+@app.route('/addPartySong', methods=['POST'])
+def addPartySong(form):
+    #frontend add form parsing you need user email, and spotify_id for the song
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
+    if s1 is None:
+        s1 = Song(spotify_id)
+        db.session.add(s1)
+        db.session.commit()
+    
+    u1.party_music.append(s1)
+    db.session.commit()
+
+
 
 
 if __name__ == '__main__':

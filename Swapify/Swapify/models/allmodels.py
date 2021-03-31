@@ -1,4 +1,5 @@
 from ..app import db
+import datetime
 
 playlistsongs = db.Table('playlistsongs',
 	db.Column('playlist_id', db.Integer, db.ForeignKey('playlist.id'), primary_key = True),
@@ -36,7 +37,7 @@ class Song(db.Model):
 	id = db.Column(db.Integer, primary_key = True)
 	spotify_id = db.Column(db.String)
 
-	def __init__(self, name=None):
+	def __init__(self, spotify_id=None):
 		self.spotify_id = spotify_id
 
 class User(db.Model):
@@ -46,23 +47,39 @@ class User(db.Model):
 	first_name = db.Column(db.String)
 	last_name = db.Column(db.String)
 	email = db.Column(db.String)
+	spotify_auth = db.Column(db.String)
 	playlists = db.relationship('Playlist', backref = 'user', lazy = True)
 
-	def __init__(self, name=None):
+	happy_music = db.relationship('Song', backref='happyusers', lazy='dynamic', secondary=happymusiclist)
+	sad_music = db.relationship('Song', backref='sadusers', lazy='dynamic', secondary=sadmusiclist)
+	study_music = db.relationship('Song', backref='studyusers', lazy='dynamic', secondary=studymusiclist)
+	party_music = db.relationship('Song', backref='partyusers', lazy='dynamic', secondary=partymusiclist)
+
+	#myFriends = db.relationship("User", backref=db.backref("users", remote_side= [id]), secondary=friends)
+	friended = db.relationship(
+        'User', secondary=friends,
+        primaryjoin=(friends.c.user1_id == id),
+        secondaryjoin=(friends.c.user2_id == id),
+        backref=db.backref('friends', lazy='dynamic'), lazy='dynamic')
+
+	def __init__(self, first_name=None, last_name= None, email = None, spotify_auth = None):
 		self.first_name = first_name
 		self.last_name = last_name
 		self.email = email
+		self.url = None
 
 class Playlist(db.Model):
 
 	__tablename__ = 'playlist'
 	id = db.Column(db.Integer, primary_key = True)
 	name = db.Column(db.String)
-	creation_date = db.Column(db.DateTime)
+	creation_date = db.Column(db.DateTime, default=db.func.current_timestamp())
 	length = db.Column(db.Float)
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
 
-	def __init__(self, name=None):
+	songs = db.relationship('Song', backref='playlists', lazy='dynamic', secondary=playlistsongs)
+
+	def __init__(self, name=None, length=None, user_id=None):
 		self.name = name
-		self.creation_date = creation_date
 		self.length = length
+		self.user_id = user_id
