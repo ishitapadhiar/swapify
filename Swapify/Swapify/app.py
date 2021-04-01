@@ -60,14 +60,14 @@ def log():
 
 @app.route('/home')
 def home():
-    testFriends()
-    print("friends tested")
+    # testFriends()
+    # print("friends tested")
     """Renders the home page."""
-    # return render_template(
-    #     'index.html',
-    #     title='Home Page',
-    #     year=datetime.now().year,
-    # )
+    return render_template(
+        'index.html',
+        title='Home Page',
+        year=datetime.now().year,
+    )
 
 @app.route('/about')
 def about():
