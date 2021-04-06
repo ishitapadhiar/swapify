@@ -47,7 +47,7 @@ manager.add_command('db', MigrateCommand)
 @app.route('/')
 @app.route('/login')
 def log():
-    scopes = "user-read-private user-read-email";
+    scopes = "user-read-private user-read-email"
     my_client_id = "b167636c03db464bac2a9a61c6663685"
     my_redirect_uri = "http://localhost:5000/home"
     return redirect('https://accounts.spotify.com/authorize' +
@@ -108,14 +108,28 @@ def addUser(form):
     return u1
 
 @app.route('/addFriend', methods=['POST'])
-def addFriend(form):
+def addFriend():
     # frontend add form parsing here, get the email of the current user (u1_email) and the 
     # user that they want to add as a friend (u2_email)
+    if request.method == 'POST':
+        #gets friend's email; should check if it's valid
+        friend = request.form['friendName']
     u1 = User.query.filter_by(email=u1_email).first()
     u2 = User.query.filter_by(email=u2_email).first()
     u1.friended.append(u2)
     db.session.commit()
 
+@app.route('/editProfile', methods=['POST'])
+def editProfile():
+    #If user updates name, email, or bio in profile settings
+    if request.method == 'POST':
+        first = request.form['first']
+        last = request.form['last']
+        bio = request.form['bio']
+        return render_template(
+            'profile.html',
+            bio = bio
+        )
 
 @app.route('/newSong', methods=['POST'])
 def addSong(form):
@@ -189,4 +203,5 @@ def addPartySong(form):
 
 
 if __name__ == '__main__':
+    app.debug = True
     app.run()
