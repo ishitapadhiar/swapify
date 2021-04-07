@@ -36,9 +36,11 @@ class Song(db.Model):
 	__tablename__ = 'song'
 	id = db.Column(db.Integer, primary_key = True)
 	spotify_id = db.Column(db.String)
+	length = db.Column(db.Integer)
 
-	def __init__(self, spotify_id=None):
+	def __init__(self, spotify_id=None, length=None):
 		self.spotify_id = spotify_id
+		self.length = length
 
 class User(db.Model):
 
