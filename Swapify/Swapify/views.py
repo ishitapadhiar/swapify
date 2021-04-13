@@ -7,6 +7,8 @@ from flask import render_template
 from flask import redirect
 from Swapify import app
 
+from flask import Flask, render_template, request
+
 @app.route('/')
 @app.route('/login')
 def log():
@@ -18,6 +20,9 @@ def log():
   '&redirect_uri=' + my_redirect_uri +
   '&response_type=token')
 
+@app.route('/genre')
+def genre():
+    return render_template('genre.html');
 
 
 @app.route('/home')

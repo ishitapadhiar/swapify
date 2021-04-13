@@ -55,6 +55,13 @@ def log():
   '&redirect_uri=' + my_redirect_uri +
   '&response_type=token')
 
+#Genre routes
+@app.route('/genre')
+def genre():
+    return render_template('genre.html');
+
+
+
 
 @app.route('/home')
 def home():
