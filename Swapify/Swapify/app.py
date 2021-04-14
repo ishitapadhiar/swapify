@@ -291,7 +291,7 @@ def addHappySong():
     # u1 = User.query.filter_by(email=email).first()
     # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
     # if s1 is None:
-    #     s1 = Song(spotify_id)
+    #     s1 = Song(spotify_id, length)
     #     db.session.add(s1)
     #     db.session.commit()
     
@@ -317,7 +317,7 @@ def addSadSong():
     # u1 = User.query.filter_by(email=email).first()
     # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
     # if s1 is None:
-    #     s1 = Song(spotify_id)
+    #     s1 = Song(spotify_id, length)
     #     db.session.add(s1)
     #     db.session.commit()
     
@@ -343,7 +343,7 @@ def addStudySong():
     # u1 = User.query.filter_by(email=email).first()
     # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
     # if s1 is None:
-    #     s1 = Song(spotify_id)
+    #     s1 = Song(spotify_id,length)
     #     db.session.add(s1)
     #     db.session.commit()
     
@@ -369,7 +369,7 @@ def addPartySong():
     # u1 = User.query.filter_by(email=email).first()
     # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
     # if s1 is None:
-    #     s1 = Song(spotify_id)
+    #     s1 = Song(spotify_id,length)
     #     db.session.add(s1)
     #     db.session.commit()
     
