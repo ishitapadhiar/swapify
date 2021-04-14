@@ -145,6 +145,8 @@ def callback():
 
     return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
 
+
+
 @app.route('/home')
 def home():
     # testFriends()
@@ -155,6 +157,11 @@ def home():
         title='Home Page',
         year=datetime.now().year
     )
+
+#Genre routes
+@app.route('/genre')
+def genre():
+    return render_template('genre.html')
 
 @app.route('/about')
 def about():
@@ -184,13 +191,41 @@ def profile():
         year=datetime.now().year,
         message='Settings'
     )
-@app.route('/newUser', methods = ['POST'])
-def addUser(form):
+
+@app.route('/user', methods = ['POST', 'GET', 'PUT'])
+def user(form):
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
-    u1 = User(first, last, email)
-    db.session.add(u1)
-    db.session.commit()
+    spotify_auth = None
+    if request.method == 'POST':
+        u1 = User.query.filter_by(email=email).first()
+        if u1 is None:
+            u1 = User(first, last, email, spotify_auth)
+            db.session.add(u1)
+            db.session.commit()
+
+    if request.method == 'GET':
+        u1 = User.query.filter_by(email=email).first()
+        return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id
+        )
+
+    if request.method == 'PUT':
+        u1 = User.query.filter_by(email=email).first()
+        # add the changedFields dictionary by parsing the object from the function
+        if 'first' in changedFields.keys():
+            u1.first_name = changedFields['first']
+        if 'last' in changedFields.keys():
+            u1.last_name = changedFields['last']
+        if 'auth' in changedFields.keys():
+            u1.spotify_auth = changedFields['auth']
+            
+        db.session.commit()
+
     return u1
 
 @app.route('/addFriend', methods=['POST'])
@@ -205,22 +240,27 @@ def addFriend():
     u1.friended.append(u2)
     db.session.commit()
 
-@app.route('/editProfile', methods=['POST'])
-def editProfile():
-    #If user updates name, email, or bio in profile settings
-    if request.method == 'POST':
-        first = request.form['first']
-        last = request.form['last']
-        bio = request.form['bio']
-        return render_template(
-            'profile.html',
-            bio = bio
-        )
+# removing this function, and it is incorrect, this is done through the PUT method, I 
+# have included one for users in the user route/function (line 100)     
+
+# @app.route('/editProfile', methods=['POST'])
+# def editProfile():
+#     #If user updates name, email, or bio in profile settings
+#     if request.method == 'POST':
+#         first = request.form['first']
+#         last = request.form['last']
+#         bio = request.form['bio']
+#         return render_template(
+#             'profile.html',
+#             bio = bio
+#         )
+
 
 @app.route('/newSong', methods=['POST'])
 def addSong(form):
     #frontend add form parsing here, you need a unique identifier from spotify (spotify_id)
-    s1 = Song(spotify_id)
+    #convert length to integer by rounding to the closest possible minute.
+    s1 = Song(spotify_id, length)
     db.session.add(s1)
     db.session.commit()
     return s1
