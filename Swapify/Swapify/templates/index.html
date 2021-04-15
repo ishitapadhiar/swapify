@@ -8,13 +8,25 @@
 <main>
 <style>
 @import url('https://fonts.googleapis.com/css?family=Open Sans:400,700|Montserrat');
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Montserrat';
+/*body {*/
+/*  margin: 0;
+  padding: 0;*/
+/*  font-family: 'Montserrat';
   font-size: 13px;
   letter-spacing: 1px;
+  height: 110%;
+  background-color: #11133f;
+  background-image: url("/static/templates/newdark.gif");
 }
+
+
+.light-mode {
+  background-color: white;
+  height: 110%;
+  background-image: url("/static/templates/newlight.gif");
+  background-repeat: no-repeat;
+  background-position: top;
+}*/
 
 #tabs {
   width: 700px;
@@ -217,14 +229,22 @@ ul li a.active {
     <!-- {% for item in sorted_array%}
     <p> {{ item }} </p>
     {% endfor %} -->
-	<div style="padding-top: 450px">
+<body>
+	<div style="padding-top: 150px">
 	</div>
 <div style="background:#DC51BC; padding-top:10px; margin-left: 80px; margin-right: 80px; margin-bottom: 100px" class="jumbotron">
     <div class="col text-center">
         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700">Welcome</h1>
         <p>
-            You have successfully logged in and may start using Swapify.
+            You have successfully logged in and may start using Swapify. Toggle between dark and light mode here
         </p>
+        <button type="button" class="btn btn-default" onclick="myFunction()">Toggle Modes</button>
+        <script>
+          function myFunction() {
+            var element = document.body;
+            element.classList.toggle("light-mode");
+          }
+        </script>
     </div>
 
 </div>
@@ -245,7 +265,6 @@ ul li a.active {
           <span>
             The Mood Match page consists of you selecting which emoji you want to attach to the specific song that is currently playing. There are four emojis that you can choose from. Simply tap the emojis to attach the song to that playlist.
           </span>
-          <a class="para-a" href="#">Learn More</a>
         </div>
     </li>
     <li>
@@ -293,6 +312,8 @@ ul li a.active {
   </div>
 </div>
 
+</body>
+
 <script>
     $(function() {
   $("#tabs").tabs({
@@ -314,7 +335,6 @@ ul li a.active {
 </script>
 
 <script src="/static/scripts/Spotify.js"></script>
-
 </main>
 
 {% endblock %}

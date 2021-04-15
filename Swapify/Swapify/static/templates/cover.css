@@ -26,12 +26,22 @@ a:hover {
 
 html,
 body {
-  height: 100%;
-  background-image: url("Sangeetic.gif");
+/*  height: 100%;*/
+  background-image: url("newdark.gif");
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: center top;
+  /*background-color: white;*/
   background-color: #11133f;
 }
+
+.light-mode {
+  background-color: white;
+  height: 100%;
+  background-image: url("newlight.gif");
+  background-repeat: no-repeat;
+  background-position: center top;
+}
+
 h1 {
   padding: 20px;
 }

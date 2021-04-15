@@ -22,7 +22,7 @@
 *::before, *::after {
   box-sizing: border-box;
 }
-body {
+/*body {
   font-size: 1rem;
   line-height: 2;
   padding-bottom: 250px;
@@ -31,7 +31,7 @@ body {
           justify-content: center;
   margin: 0;
   min-height: 100vh;
-}
+}*/
 button {
   position: relative;
   display: inline-block;
@@ -96,8 +96,10 @@ button.big-button:active::before {
 
 <main>
  <body>
+  <div style="padding-top: 150px">
+  </div>
   
-  <button class="big-button" onclick = "loadkpop()" id = "loadkpop">KPOP</button>
+  <button class="big-button" id = "loadkpop">KPOP</button>
   <button class="big-button" name = "submit_button" value = "kpop">HIP HOP</button>
   <button class="big-button" name = "submit_button" value = "kpop">POPULAR</button>
   <button class="big-button" name = "submit_button" value = "kpop">COUNTRY</button>
