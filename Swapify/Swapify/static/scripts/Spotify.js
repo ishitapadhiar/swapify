@@ -4,6 +4,7 @@
 
 const API_ENDPOINT = 'https://api.spotify.com/v1/me';
 let ACCESS_TOKEN;
+let DISPLAY_NAME;
 
 function getAccessToken() {
     const currentLocation = String(window.location).split('#')[1];
@@ -25,13 +26,43 @@ function fetchProfileInformation() {
         return response.json();
     }).then(function (json) {
         console.log(json);
-        //updateProfileInformation(json);
+        DISPLAY_NAME = json.display_name;
+
+        var tdata = {
+            token: ACCESS_TOKEN,
+            display_name: json.display_name,
+            email: json.email,
+
+        }
+
+        $.ajax({
+            url: "/user",
+            type: 'POST',
+            //processData: false,
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(tdata),
+            success: function (data) {
+                //alert("it worked");
+                console.log(data);
+            },
+
+
+        });
+
     }).catch(function (error) {
         console.log(error);
     });
 }
 $(function () {
-    x = getAccessToken();
+    //x = getAccessToken().get('access_token');
+    
     fetchProfileInformation()
-    alert(x)
+    console.log(ACCESS_TOKEN);
+
+
+    
+
+    
+    //alert(document.cookie)
 });

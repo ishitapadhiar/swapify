@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Flask, render_template, request
 from datetime import datetime
@@ -8,6 +9,7 @@ from flask_script import Manager
 from flask_migrate import Migrate, MigrateCommand
 from flask import render_template
 from flask import redirect
+from flask import request
 
 os.environ['DBUSER'] = 'usxuxwby' 
 os.environ['DBPASS'] = 'sVUyUo4Z1aqH4MiKkLQtWlw8RNMhaq-H'
@@ -49,10 +51,13 @@ manager.add_command('db', MigrateCommand)
 def log():
     scopes = "user-read-private user-read-email"
     my_client_id = "b167636c03db464bac2a9a61c6663685"
-    my_redirect_uri = "http://localhost:5000/home"
+    my_redirect_uri = "http://localhost:5555/home"
+    sdialog = "true"
     return redirect('https://accounts.spotify.com/authorize' +
   '?client_id=' + my_client_id +
   '&redirect_uri=' + my_redirect_uri +
+  '&scope=' + scopes +
+  '&show_dialog='+ sdialog +
   '&response_type=token')
 
 
@@ -98,19 +103,33 @@ def profile():
     )
 
 @app.route('/user', methods = ['POST', 'GET', 'PUT'])
-def user(form):
+def user():
+    print("message recieved")
+    print(request)
+    rspotify_auth = request.json['token']
+    remail = request.json['email']
+    rname = request.json['display_name']
+    
+
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
-    spotify_auth = None
     if request.method == 'POST':
-        u1 = User.query.filter_by(email=email).first()
+        u1 = User.query.filter_by(email=remail).first()
         if u1 is None:
-            u1 = User(first, last, email, spotify_auth)
+            u1 = User(rname, rname, email, spotify_auth)
             db.session.add(u1)
             db.session.commit()
+        x = {
+            "name": rname,
+            "email": remail,
+            "token": rspotify_auth
+            }
+        ret = json.dumps(x)
+        return x
+
 
     if request.method == 'GET':
-        u1 = User.query.filter_by(email=email).first()
+        u1 = User.query.filter_by(email=remail).first()
         return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
