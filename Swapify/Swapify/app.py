@@ -39,6 +39,7 @@ from Swapify.models.artist import Artist
 from Swapify.models.allmodels import User
 from Swapify.models.allmodels import Playlist
 from Swapify.models.allmodels import Song
+from Swapify.playlistGenerator import PlaylistGenerator
 
 
 
@@ -162,7 +163,7 @@ def callback():
 def home():
     # testFriends()
     # print("friends tested")
-    """Renders the home page."""
+    """Renders the home page."""  
     return render_template(
         'index.html',
         title='Home Page',
@@ -177,10 +178,12 @@ def genre():
 @app.route('/about')
 def about():
     """Renders the mood page."""
+
     return render_template(
         'about.html',
         title='Mood Page',
-        song_uri = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id,
+        song_uri = '1aEsTgCsv8nOjEgyEoRCpS', #hardcoded track id,
+        length = 3
     )
 
 @app.route('/contact')
@@ -276,13 +279,55 @@ def addSong(form):
     db.session.commit()
     return s1
 
-@app.route('/newPlaylist', methods=['POST'])
+@app.route('/generateNewPlaylist', methods=['POST'])
+def generateNewPlaylist(form):
+    #frontend add form parsing you need playlist name, length and user_id
+    token = request.form['token']
+    email = request.form['email']
+    uri = request.form['uri']
+    name = request.form['name']
+    mood = request.form['mood']
+    friends = request.form['friends']
+    time = request.form['time']
+    numSongs = request.form['numSongs']
+
+    generator = PlaylistGenerator(email)
+    generator.generate_user_playlist(name, mood, friends, time, numSongs)
+
+@app.route('/getPlaylist', methods=['GET'])
+def getPlaylist(form):
+    email = request.form['email']
+    playlistName = request.form['playlistName']
+
+    u1 = User.query.filter_by(email=email).first()   
+    allPlaylists = u1.playlists
+
+    spotifySongId = []
+    for p in allPlaylists:
+        if p.name == playlistName:
+            for song in p.songs:
+                spotifySongId.append(song.spotify_id)
+
+            return jsonify(
+                error = "No Errors",
+                name = p.name,
+                length = p.length,
+                songs = spotifySongId
+            )
+
+    return jsonify( error = "No matches", name = playlistName,)
+
+
+
+
+@app.route('/', methods=['POST'])
 def addPlaylist(form):
     #frontend add form parsing you need playlist name, length and user_id
     p1 = Playlist(name, length, user_id)
     db.session.add(p1)
     db.session.commit()
     return p1
+
 
 @app.route('/nextSong', methods=['GET'])
 def nextSong(token, email, uri):
@@ -310,6 +355,7 @@ def addHappySong():
     uri = request.form['uri']
     length = round(int(request.form['length']) / 60000)
     print(type(int(length)))
+
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -330,6 +376,7 @@ def addSadSong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
+    print(type(request.form['length']))
     length = round(int(request.form['length']) / 60000)
     
     u1 = User.query.filter_by(email=email).first()
@@ -339,8 +386,9 @@ def addSadSong():
         db.session.add(s1)
         db.session.commit()
     
-    u1.happy_music.append(s1)
-    db.session.commit()    
+    u1.sad_music.append(s1)
+    db.session.commit()   
+
     return nextSong(token, email, uri)
 
 @app.route('/addStudySong', methods=['POST'])
@@ -350,15 +398,17 @@ def addStudySong():
     email = request.form['email']
     uri = request.form['uri']
     length = round(int(request.form['length']) / 60000)
+
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
         s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
-    
-    u1.happy_music.append(s1)
+
+    u1.study_music.append(s1)
     db.session.commit()
+    
     return  nextSong(token, email, uri)
 
 @app.route('/addPartySong', methods=['POST'])
@@ -368,6 +418,7 @@ def addPartySong():
     email = request.form['email']
     uri = request.form['uri']
     length = round(int(request.form['length']) / 60000)
+
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -375,7 +426,7 @@ def addPartySong():
         db.session.add(s1)
         db.session.commit()
     
-    u1.happy_music.append(s1)
+    u1.party_music.append(s1)
     db.session.commit()
 
     return nextSong(token, email, uri)
