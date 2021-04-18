@@ -102,100 +102,56 @@
     </style>
     <body>
         <input style="margin-bottom:25px" type="search" placeholder="Search..">
-        <div class="tbg">
-            <div class="tbgwrap">
-              <div class="tphoto" style="background-color: #000000;">
-                <div class="tname">Song Name</div>
-                <div class="tinfo" style="padding-top:10px; padding-left:130px; margin-left:120px; margin-right: 0px;">
-                    <div class="tinfo" >
-                        <button class="btn">
-                            <i class="fa fa-play" aria-hidden="true"> </i> 
-                        </button>
-                        <button class="btn">
-                            <i class="fa fa-fast-forward" aria-hidden="true"> </i>
-                        </button>
+        <div >
+                <iframe src="https://open.spotify.com/embed/track/{{song_uri}}" width="400" height="480" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>  
+            </div>
+              
+            <div class="tcontrols" style="margin-top: 20px;">
+                <form action="{{url_for('addHappySong') }}" method="post">
+                    <div class="tyes btn" >
+                            <i class="fas fa-smile-beam" aria-hidden="true"></i>
+                            <input type="hidden" name="token" value="{{auth}}">
+                            <input type="hidden" name="email" value="{{email}}">
+                            <input type="hidden" name="uri" value="{{song_uri}}">
+                            <input type="hidden" name="length" value="{{length}}">
+                            <input type="submit">
                     </div>
-                </div>
-                <div class="tname" style="margin-top:-20px; margin-left: -135px;">Artist</div>
-                <img style="width: 275px; margin-left:35px; margin-top: 35px; margin-bottom: 50px;"src="https://1000logos.net/wp-content/uploads/2017/08/Spotify-Logo.png" alt="Song image"/>
-              </div>
-              <div class="tcontrols" style="margin-top: 20px;">
-                <div class="tyes btn">
-                    <i class="fas fa-smile-beam" aria-hidden="true"></i>
-                </div>
-                <div class="tyes btn">
-                    <i class="	fas fa-frown" aria-hidden="true"></i>
-                </div>
+                </form>
+                <form action="{{url_for('addSadSong') }}" method="post">
+                    <div class="tyes btn">
+                        <i class="	fas fa-frown" aria-hidden="true"></i>
+                        <input type="hidden" name="token" value="{{auth}}">
+                        <input type="hidden" name="email" value="{{email}}">
+                        <input type="hidden" name="uri" value="{{song_uri}}">
+                        <input type="hidden" name="length" value="{{length}}">
+                        <input type="submit">
+                        
+                    </div>
+                </form>
                 <br>
-                <div class="tyes btn">
-                    <i class="fas fa-book-open" style="margin-left: -25px;" aria-hidden="true"></i>
-                </div>
-                <div class="tyes btn"  >
-                    <i class="fas fa-birthday-cake" style="margin-left: -15px;"  aria-hidden="true"></i>
-                </div>
-              </div>
+                <form action="{{url_for('addStudySong') }}" method="post">
+                    <div class="tyes btn">
+                        <i class="fas fa-book-open" style="margin-left: -25px;" aria-hidden="true"></i>
+                        <input type="hidden" name="token" value="{{auth}}">
+                        <input type="hidden" name="email" value="{{email}}">
+                        <input type="hidden" name="uri" value="{{song_uri}}">
+                        <input type="hidden" name="length" value="{{length}}">
+                        <input type="submit">
+                    </div>
+                </form>
+                <form action="{{url_for('addPartySong') }}" method="post">
+                    <div class="tyes btn"  >
+                        <i class="fas fa-birthday-cake" style="margin-left: -15px;"  aria-hidden="true"></i>
+                        <input type="hidden" name="token" value="{{auth}}">
+                        <input type="hidden" name="email" value="{{email}}">
+                        <input type="hidden" name="uri" value="{{song_uri}}">
+                        <input type="hidden" name="length" value="{{length}}">
+                        <input type="submit">
+                    </div>
+                </form>
             </div>
-          </div>
-    </body>
-
-    <!-- <div class="row">
-        <div class="col-md-12" style="margin-bottom: 100px; margin-top: 20px;">
-            <div style="margin-top: 5px; margin-bottom: 20px; margin-left: auto; width: 40%;" class="row">
-                <input type="search" placeholder="Search..">
-            </div>
-            <br>
-            <div style="background:#77d4eb; margin-top: 0px; margin-bottom:20px; margin-left:20px; height: 400px; width: 400px" class="row jumbotron">
-                <div style="margin-top: -40px; margin-bottom: 10px; margin-left: 20px; height: 270px; width: 90%" class="row jumbotron">
-                    <h2 style="color: #5e6a6d; text-align: center;" >Spotify song cover photo here</h2>
-                    <img style="width: 75px; margin-left:75px; padding-bottom: 100px;"src="https://1000logos.net/wp-content/uploads/2017/08/Spotify-Logo.png" alt="Song image"/>
-                </div>
-                <div style="margin-top:5px; margin-bottom: 30px; text-align: center;" class="container">
-                    <h2>Song Title</h2>
-                </div>
-                <div style="margin-top:-35px; text-align: center;" class="container">
-                    <h3>Artist</h3>
-                </div>
-                
-            </div>
-            <div style="background: #eb9ceb; margin-top: 10px; margin-left:20px; height:80px; width:400px;" class="row">
-                <div class="col-md-6">
-                    <button style="margin-top: 5px; margin-bottom: 20px; margin-left: 30px;" class="btn-lg">
-                    <img style="width:50px;" src="https://cdn.fastly.picmonkey.com/content4/previews/arrows_2/arrows_2_44_550.png" alt="Play">
-                    </button>
-                </div>
-                <div class="col-md-6">
-                <button style="margin-top: 5px; margin-left: 40px;" class="btn-lg">
-                    <img style="width:50px" src="https://static.thenounproject.com/png/1384165-200.png" alt="Skip">
-                </button>
-                </div>
-            </div>
-            <div style="margin-top: 10px; height:200px; width: 500px" class="row">
-                <div class="col-md-6">
-                    <button style="margin-left: 20px; height:75px; width: 175px;" class="btn-lg">
-                        <img style="width:50px;" src="https://i.pinimg.com/originals/b4/1f/87/b41f878be5ccaa5329d19d4dbebd14ed.png" alt="happy">
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button style="margin-left: -3px; height:75px; width: 175px;" class="btn-lg">
-                        <img style="width:50px" src="http://cdn.shopify.com/s/files/1/1061/1924/products/Sad_Face_Emoji_grande.png?v=1571606037" alt="sad">
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button style="margin-left: 20px; height:75px; width: 175px;" class="btn-lg">
-                        <img style="width:50px" src="https://i.pinimg.com/originals/31/14/8c/31148c886272e349b54448ac68d893c4.png" alt="angry">
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button style="margin-left: -3px; height:75px; width: 175px;" class="btn-lg">
-                        <img style="width:50px" src="https://emojis.wiki/emoji-pics/apple/relieved-face-apple.png" alt="calm">
-                    </button>
-                </div>
-                <!-- <button class="btn-lg">emoji 1</button>
-                <button class="btn-lg">emoji 2</button>
-                <button class="btn-lg">emoji 3</button>
-                <button class="btn-lg">emoji 4</button> -->
-            <!-- </div>
         </div>
-    </div> -->
+    </body>
 </main>
+      
 {% endblock %}
