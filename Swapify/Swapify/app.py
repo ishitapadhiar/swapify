@@ -133,17 +133,28 @@ def callback():
     single_playlist_response = requests.get(single_playlist_endpoint, headers=authorization_header)
     single_playlist_data = single_playlist_response.json()
 
-    #Get User Email and Song Info
-    email = display_arr[0]['email']
-    single_info = single_playlist_data["items"][0]["track"]["album"]
-    song_name = (single_info["name"])
-    artist_name = (single_info["artists"][0]["name"])
-    image = (single_info["images"][2]["url"])
-    uri_link = (single_info["artists"][0]["uri"])
-    artist_id = uri_link.split(':')[2]
-    song_id = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id
 
-    return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
+    
+
+    # #Get User Email and Song Info
+    email = display_arr[0]['email']
+    # single_info = single_playlist_data["items"][0]["track"]["album"]
+    # song_name = (single_info["name"])
+    # artist_name = (single_info["artists"][0]["name"])
+    # image = (single_info["images"][2]["url"])
+    # uri_link = (single_info["artists"][0]["uri"])
+    # artist_id = uri_link.split(':')[2]
+    # song_id = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id
+
+    endpoint = "https://api.spotify.com/v1/recommendations?seed_genres=pop"
+    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
+    resp_data = response.json()
+    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
+    length = resp_data['tracks'][0]['duration_ms']  
+    return render_template("about.html", auth=authorization_header, email=email, song_uri=new_uri, length= length)
+
+
+    # return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
 
 
 
@@ -273,31 +284,44 @@ def addPlaylist(form):
     db.session.commit()
     return p1
 
-@app.route('/addHappySong', methods=['POST'])
-def addHappySong():
-    
-    #frontend add form parsing you need user email, and spotify_id for the song
+@app.route('/nextSong', methods=['GET'])
+def nextSong(token, email, uri):
     token = request.form['token']
     email = request.form['email']
-    uri = request.form['uri']   #spotify_id for current song
+    uri = request.form['uri']
+
     access_token = token.split('Bearer ')
     access_token = (access_token[1][:len(access_token)-4])
     headers = {"Authorization": f"Bearer {access_token}"}
     endpoint = "https://api.spotify.com/v1/recommendations?seed_genres=pop"
     response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
     resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2]) #spotify_id for next song
+    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
+    length = resp_data['tracks'][0]['duration_ms']  
+    return render_template("about.html", auth=headers, email=email, song_uri=new_uri, length= length)
 
-    # u1 = User.query.filter_by(email=email).first()
-    # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
-    # if s1 is None:
-    #     s1 = Song(spotify_id, length)
-    #     db.session.add(s1)
-    #     db.session.commit()
+
+@app.route('/addHappySong', methods=['POST'])
+def addHappySong():
     
-    # u1.happy_music.append(s1)
-    # db.session.commit()
-    return render_template("about.html", auth=headers, email=email, song_uri=new_uri)
+    #frontend add form parsing you need user email, and spotify_id for the song
+    token = request.form['token']
+    email = request.form['email']
+    uri = request.form['uri']
+    length = request.form['length']
+    print("email", email)
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Song.query.filter_by(spotify_id=uri).first()
+    if s1 is None:
+        s1 = Song(uri, length)
+        db.session.add(s1)
+        db.session.commit()
+    
+    u1.happy_music.append(s1)
+    db.session.commit()
+
+    return nextSong(token, email, uri)
+    
 
 
 @app.route('/addSadSong', methods=['POST'])
@@ -306,25 +330,18 @@ def addSadSong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    access_token = token.split('Bearer ')
-    access_token = (access_token[1][:len(access_token)-4])
-    headers = {"Authorization": f"Bearer {access_token}"}
-    endpoint = "https://api.spotify.com/v1/recommendations?seed_artists=2kxP07DLgs4xlWz8YHlvfh&seed_genres=pop&seed_tracks=1aEsTgCsv8nOjEgyEoRCpS"
-    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-    resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
+    length = request.form['durationms']
     
-    # u1 = User.query.filter_by(email=email).first()
-    # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
-    # if s1 is None:
-    #     s1 = Song(spotify_id, length)
-    #     db.session.add(s1)
-    #     db.session.commit()
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Song.query.filter_by(spotify_id=uri).first()
+    if s1 is None:
+        s1 = Song(spotify_id, length)
+        db.session.add(s1)
+        db.session.commit()
     
-    # u1.sad_music.append(s1)
-    # db.session.commit()
-    
-    return render_template("about.html", auth=headers, email=email, song_uri=new_uri)
+    u1.happy_music.append(s1)
+    db.session.commit()    
+    return nextSong(token, email, uri)
 
 @app.route('/addStudySong', methods=['POST'])
 def addStudySong():
@@ -332,25 +349,17 @@ def addStudySong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    access_token = token.split('Bearer ')
-    access_token = (access_token[1][:len(access_token)-4])
-    headers = {"Authorization": f"Bearer {access_token}"}
-    endpoint = "https://api.spotify.com/v1/recommendations?seed_artists=2kxP07DLgs4xlWz8YHlvfh&seed_genres=pop&seed_tracks=1aEsTgCsv8nOjEgyEoRCpS"
-    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-    resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
-
-    # u1 = User.query.filter_by(email=email).first()
-    # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
-    # if s1 is None:
-    #     s1 = Song(spotify_id,length)
-    #     db.session.add(s1)
-    #     db.session.commit()
+    length = request.form['durationms']
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Song.query.filter_by(spotify_id=uri).first()
+    if s1 is None:
+        s1 = Song(spotify_id, length)
+        db.session.add(s1)
+        db.session.commit()
     
-    # u1.study_music.append(s1)
-    # db.session.commit()
-
-    return render_template("about.html", auth=headers, email=email, song_uri=new_uri)
+    u1.happy_music.append(s1)
+    db.session.commit()
+    return  (token, email, uri)
 
 @app.route('/addPartySong', methods=['POST'])
 def addPartySong():
@@ -358,25 +367,18 @@ def addPartySong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    access_token = token.split('Bearer ')
-    access_token = (access_token[1][:len(access_token)-4])
-    headers = {"Authorization": f"Bearer {access_token}"}
-    endpoint = "https://api.spotify.com/v1/recommendations?seed_artists=2kxP07DLgs4xlWz8YHlvfh&seed_genres=pop&seed_tracks=1aEsTgCsv8nOjEgyEoRCpS"
-    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-    resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
-
-    # u1 = User.query.filter_by(email=email).first()
-    # s1 = Songs.query.filter_by(spotify_id=spotify_id).first()
-    # if s1 is None:
-    #     s1 = Song(spotify_id,length)
-    #     db.session.add(s1)
-    #     db.session.commit()
+    length = request.form['durationms']
+    u1 = User.query.filter_by(email=email).first()
+    s1 = Song.query.filter_by(spotify_id=uri).first()
+    if s1 is None:
+        s1 = Song(spotify_id, length)
+        db.session.add(s1)
+        db.session.commit()
     
-    # u1.party_music.append(s1)
-    # db.session.commit()
+    u1.happy_music.append(s1)
+    db.session.commit()
 
-    return render_template("about.html", auth=headers, email=email, song_uri=new_uri)
+    return nextSong(token, email, uri)
 
 if __name__ == '__main__':
     app.debug = True
