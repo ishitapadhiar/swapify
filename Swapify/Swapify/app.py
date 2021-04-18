@@ -170,7 +170,7 @@ def callback():
     resp_data = response.json()
     new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
     length = resp_data['tracks'][0]['duration_ms']  
-    return render_template("index.html", auth=authorization_header, email=email, song_uri=new_uri, length= length)
+    return render_template("about.html", auth=authorization_header, email=email, song_uri=new_uri, length= length)
 
 
     # return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
@@ -195,12 +195,20 @@ def genre():
 
 @app.route('/about')
 def about():
+
+    #will remove later
+    endpoint = "https://api.spotify.com/v1/recommendations?seed_genres={}".format(session['genre'])
+    response = requests.get(endpoint, headers=session['auth'])
+    resp_data = response.json()
+    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2]) #spotify_id for next song
+    length = resp_data['tracks'][0]['duration_ms']
     """Renders the mood page."""
     return render_template(
         'about.html',
         title='Mood Page',
-        song_uri = '1aEsTgCsv8nOjEgyEoRCpS', #hardcoded track id,
-        auth = session["auth"]
+        song_uri = new_uri, #hardcoded track id,
+        auth = session["auth"],
+        length=length
     )
 
 @app.route('/contact')
@@ -315,8 +323,8 @@ def genreSong():
     response = requests.get(endpoint, headers=session['auth'])
     resp_data = response.json()
     new_uri = (resp_data['tracks'][0]['uri'].split(":")[2]) #spotify_id for next song
-
-    return render_template("about.html", auth=session['auth'], email=session['email'], song_uri=new_uri)
+    length = resp_data['tracks'][0]['duration_ms']
+    return render_template("about.html", auth=session['auth'], email=session['email'], song_uri=new_uri, length=length)
 
 @app.route('/nextSong', methods=['GET'])
 def nextSong(token, email, uri):
