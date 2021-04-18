@@ -335,7 +335,7 @@ def addSadSong():
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
-        s1 = Song(spotify_id, length)
+        s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
     
@@ -353,13 +353,13 @@ def addStudySong():
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
-        s1 = Song(spotify_id, length)
+        s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
     
     u1.happy_music.append(s1)
     db.session.commit()
-    return  (token, email, uri)
+    return  nextSong(token, email, uri)
 
 @app.route('/addPartySong', methods=['POST'])
 def addPartySong():
@@ -371,7 +371,7 @@ def addPartySong():
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
-        s1 = Song(spotify_id, length)
+        s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
     
