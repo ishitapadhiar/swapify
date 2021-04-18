@@ -12,47 +12,52 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
-
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!--NEEDED for ajax, not from layout extension? TODO-->
 <div>
     <div class="row">
         <div class="col-md-6">
-            <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div> 
+            <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div>
         </div>
         <div class="col-md-6">
-            <button class = "px-3 btn btn-sm btn-outline-primary" style= "margin-top:10px;" >
-                <i class="fas fa-user-friends"></i> View Friends</button>
-            <button class = "px-3 btn btn-sm btn-outline-primary" style= "margin-top:20px;" data-toggle="modal" data-target="#addFriendModal">
-                <i class="fas fa-plus"></i> Add Friend</button>
+            <button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:10px;">
+                <i class="fas fa-user-friends"></i> View Friends
+            </button>
+            <button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:20px;" data-toggle="modal" data-target="#addFriendModal">
+                <i class="fas fa-plus"></i> Add Friend
+            </button>
             <!-- Modal -->
             <div class="modal fade" id="addFriendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel" style="color: black">Add Friend</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    </div>
-                    
-                    <div class="modal-body">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel" style="color: black">Add Friend</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
                             <div class="inputs">
                                 <form action="{{url_for('addFriend') }}" method="post">
                                     <label style="color: black">Enter Friend's Spotify Email</label>
                                     <input class="form-control inputs" type="text" name="friendName">
                                     <br>
-                                    <input class = "btn btn-primary" type="submit" value="Submit">
+                                    <input class="btn btn-primary" type="submit" value="Submit">
                                 </form>
                             </div>
-                    </div>
-                    <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <!-- <button type="button" class="btn btn-primary">Submit</button> -->
-                   
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- <button type="button" class="btn btn-primary">Submit</button> -->
+
+                        </div>
                     </div>
                 </div>
-                </div>
-            </div>    
+            </div>
         </div>
+    </div>
+    <div id="profile">
+        <h1> MY id [[]]</h1>
     </div>
     <form action="{{url_for('profile') }}" method="post">
         <div class="row" style="margin-top: 20px">
@@ -60,13 +65,13 @@
                 <h4>First Name</h4>
                 <div class="inputs">
 
-                    <input class="form-control" type="text" placeholder="First Name" name="first"> 
+                    <input class="form-control" type="text" placeholder="First Name" name="first">
                 </div>
             </div>
             <div class="col-md-6">
                 <h4>Last Name</h4>
-                <div class="inputs"> 
-                    <input class="form-control" type="text" placeholder="Last Name" name="last"> 
+                <div class="inputs">
+                    <input class="form-control" type="text" placeholder="Last Name" name="last">
                 </div>
             </div>
         </div>
@@ -74,15 +79,15 @@
             <div class="col-md-12">
                 <h4>Bio</h4>
                 <div class="about-inputs">
-                     <textarea class="form-control" type="text" placeholder="Tell us about yourself" name="bio">{{bio}}</textarea> 
+                    <textarea class="form-control" type="text" placeholder="Tell us about yourself" name="bio">{{bio}}</textarea>
                 </div>
             </div>
         </div>
         <br>
         <input class="px-3 btn btn-sm btn-outline-primary" style="margin-left: 400px; margin-right: 20px;" type="submit" value="Save">
     </form>
-    <div><button class="px-3 btn btn-sm btn-primary"  onclick="window.location.href = 'https://www.spotify.com/logout/'">Log Out</button> </div>
+    <div><button class="px-3 btn btn-sm btn-primary" onclick="window.location.href = 'http://localhost:5555/login'">Log Out</button> </div>
     
-
 </div>
+<script src="/static/scripts/profile.js"></script>
 {% endblock %}

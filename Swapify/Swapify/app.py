@@ -114,21 +114,26 @@ def user():
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
     if request.method == 'POST':
-        u1 = User.query.filter_by(email=remail).first()
-        if u1 is None:
-            u1 = User(rname, rname, email, spotify_auth)
-            db.session.add(u1)
-            db.session.commit()
+        #u1 = User.query.filter_by(email=remail).first()
+        #if u1 is None:
+            #u1 = User(rname, rname, remail, spotify_auth)
+            #db.session.add(u1)
+            #db.session.commit()
         x = {
             "name": rname,
             "email": remail,
-            "token": rspotify_auth
+            "token": rspotify_auth,
+            "id": 15
             }
         ret = json.dumps(x)
+        #should pass back an id for front end to make a cookie
         return x
 
 
     if request.method == 'GET':
+        print("profile requested")
+        return 
+
         u1 = User.query.filter_by(email=remail).first()
         return jsonify(
             first_name=u1.first_name,
@@ -137,7 +142,7 @@ def user():
             spotify_auth= u1.spotify_auth,
             id= u1.id
         )
-
+    #for edit profile
     if request.method == 'PUT':
         u1 = User.query.filter_by(email=email).first()
         # add the changedFields dictionary by parsing the object from the function

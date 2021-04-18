@@ -1,17 +1,15 @@
 // JavaScript source code
 
-//const { get } = require("jquery");
 
 const API_ENDPOINT = 'https://api.spotify.com/v1/me';
 let ACCESS_TOKEN;
-let DISPLAY_NAME;
 
 function getAccessToken() {
     const currentLocation = String(window.location).split('#')[1];
     const params = new URLSearchParams(currentLocation);
     return params;
 }
-function fetchProfileInformation() {
+function getProfileInformation() {
     const currentQueryParameters = getAccessToken();
     ACCESS_TOKEN = currentQueryParameters.get('access_token');
 
@@ -34,7 +32,7 @@ function fetchProfileInformation() {
             email: json.email,
 
         }
-
+        //request to save user in datatable
         $.ajax({
             url: "/user",
             type: 'POST',
@@ -43,26 +41,39 @@ function fetchProfileInformation() {
             contentType: "application/json",
             data: JSON.stringify(tdata),
             success: function (data) {
-                //alert("it worked");
                 console.log(data);
+                //make user cookie here from return id
+                setIDCookie(data.id)
             },
-
-
         });
 
     }).catch(function (error) {
         console.log(error);
     });
 }
+
+function setIDCookie(id) {
+    document.cookie = "SwapifyID=" + id + ",path=/";
+}
+
+function getIDCookie() {
+    var name = "SwapifyID=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
 $(function () {
-    //x = getAccessToken().get('access_token');
-    
-    fetchProfileInformation()
+    getProfileInformation()
     console.log(ACCESS_TOKEN);
-
-
-    
-
-    
-    //alert(document.cookie)
 });
+
