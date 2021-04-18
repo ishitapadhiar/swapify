@@ -98,88 +98,19 @@ button.big-button:active::before {
  <body>
   <div style="padding-top: 150px">
   </div>
-  
-  <button class="big-button" id = "loadkpop">KPOP</button>
-  <button class="big-button" name = "submit_button" value = "kpop">HIP HOP</button>
-  <button class="big-button" name = "submit_button" value = "kpop">POPULAR</button>
-  <button class="big-button" name = "submit_button" value = "kpop">COUNTRY</button>
-  <button class="big-button" name = "submit_button" value = "kpop">BLUES</button>
+  <form action="{{url_for('genreSong') }}" method="post">
+    <input class="big-button" type="submit" name="submit_button" value="POP">
+    <input class="big-button" type="submit" name = "submit_button" value = "HIP-HOP">
+    <input class="big-button" type="submit" name = "submit_button" value = "RHYTHM AND BLUES">
+    <input class="big-button" type="submit" name = "submit_button" value = "COUNTRY">
+    <input class="big-button" type="submit" name = "submit_button" value = "BLUES">
+  </form>
 <!--   <div id = "kpopplaylist" style="display: none;">
   <script>
     function loadkpop() {
       document.getElementById("document").style.display = "block";
     }
   </script> -->
- <!-- 	<h1 style="padding-top: 500px;">
- 		Your Playlists
- 	</h1>
- 	 	<h2 style="padding-top: 50px;">
- 		Happy
- 	</h2>
- 		<table class="table">
-  <thead class="thead-inverse">
-    <tr>
-      <th>#</th>
-      <th>Song</th>
-      <th>Artist</th>
-      <th>Album</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Feel Good</td>
-      <td>Gryffin</td>
-      <td>Feel Good</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>High Hopes</td>
-      <td>Panic! At The Disco</td>
-      <td>Pray for the Wicked</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Beautiful People</td>
-      <td>Ed Sheeran</td>
-      <td>Beautiful People</td>
-    </tr>
-  </tbody>
-</table>
-<h2>
-	Sad
-</h2>
-<table class="table">
-  <thead class="thead-default">
-    <tr>
-      <th>#</th>
-      <th>Song</th>
-      <th>Artist</th>
-      <th>Album</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th scope="row">1</th>
-      <td>Breathe</td>
-      <td>Lauv</td>
-      <td>I met you when I was 18</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Someone You Loved</td>
-      <td>Lewis Capaldi</td>
-      <td>Breach</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>Out of Love</td>
-      <td>Alessia Cara</td>
-      <td>The Pains of Growing</td>
-    </tr>
-  </tbody>
-</table> -->
-
   
 </body>
 </main>

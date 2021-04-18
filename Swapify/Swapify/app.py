@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session
 import requests
 from datetime import datetime
 import sqlalchemy
@@ -26,6 +26,7 @@ database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.forma
 )
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 app.config.update(
     SQLALCHEMY_DATABASE_URI=database_uri,
@@ -95,6 +96,7 @@ def index():
 
 @app.route("/callback/q")
 def callback():
+
     # Auth Step 4: Requests refresh and access tokens
     auth_token = request.args['code']
     code_payload = {
@@ -106,6 +108,10 @@ def callback():
     }
     post_request = requests.post(SPOTIFY_TOKEN_URL, data=code_payload)
 
+    res_body = post_request.json()
+    print(post_request.json())
+    session["token"] = res_body.get("access_token")
+
     # Auth Step 5: Tokens are Returned to Application
     response_data = json.loads(post_request.text)
     access_token = response_data["access_token"]
@@ -113,8 +119,10 @@ def callback():
     token_type = response_data["token_type"]
     expires_in = response_data["expires_in"]
 
+
     # Auth Step 6: Use the access token to access Spotify API
     authorization_header = {"Authorization": "Bearer {}".format(access_token)}
+    session['auth'] = authorization_header
 
     # Get profile data
     user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
@@ -142,8 +150,10 @@ def callback():
     uri_link = (single_info["artists"][0]["uri"])
     artist_id = uri_link.split(':')[2]
     song_id = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id
+    session["genre"] = "pop"
+    session["email"] = email
 
-    return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
+    return render_template("index.html", auth=authorization_header, email=email, song_uri=song_id)
 
 
 
@@ -169,7 +179,8 @@ def about():
     return render_template(
         'about.html',
         title='Mood Page',
-        song_uri = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id,
+        song_uri = '1aEsTgCsv8nOjEgyEoRCpS', #hardcoded track id,
+        auth = session["auth"]
     )
 
 @app.route('/contact')
@@ -232,29 +243,15 @@ def user(form):
 def addFriend():
     # frontend add form parsing here, get the email of the current user (u1_email) and the 
     # user that they want to add as a friend (u2_email)
+
     if request.method == 'POST':
-        #gets friend's email; should check if it's valid
-        friend = request.form['friendName']
+        u1_email = session["email"]
+        u2_email = request.form['friendName'] # friend's email
+    
     u1 = User.query.filter_by(email=u1_email).first()
     u2 = User.query.filter_by(email=u2_email).first()
     u1.friended.append(u2)
     db.session.commit()
-
-# removing this function, and it is incorrect, this is done through the PUT method, I 
-# have included one for users in the user route/function (line 100)     
-
-# @app.route('/editProfile', methods=['POST'])
-# def editProfile():
-#     #If user updates name, email, or bio in profile settings
-#     if request.method == 'POST':
-#         first = request.form['first']
-#         last = request.form['last']
-#         bio = request.form['bio']
-#         return render_template(
-#             'profile.html',
-#             bio = bio
-#         )
-
 
 @app.route('/newSong', methods=['POST'])
 def addSong(form):
@@ -272,6 +269,34 @@ def addPlaylist(form):
     db.session.add(p1)
     db.session.commit()
     return p1
+
+
+@app.route('/genreSong', methods=['POST'])
+def genreSong():
+    if request.form.get('submit_button') == 'POP':
+        genre = 'pop'
+    
+    elif request.form.get('submit_button') == 'HIP-HOP': 
+        genre = 'hip-hop'
+    
+    elif request.form.get('submit_button') == 'RHYTHM AND BLUES': 
+        genre = 'r-n-b'
+    
+    elif request.form.get('submit_button') == 'COUNTRY': 
+        genre = 'country'
+    
+    elif request.form.get('submit_button') == 'BLUES': 
+        genre = 'blues'
+    # access_token = token.split('Bearer ')
+    # access_token = (auth[1][:len(access_token)-4])
+    # headers = {"Authorization": f"Bearer {access_token}"}
+    endpoint = "https://api.spotify.com/v1/recommendations?seed_genres={}".format(genre)
+    print(session['auth'])
+    response = requests.get(endpoint, headers=session['auth'])
+    resp_data = response.json()
+    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2]) #spotify_id for next song
+
+    return render_template("about.html", auth=session['auth'], email=session['email'], song_uri=new_uri)
 
 @app.route('/addHappySong', methods=['POST'])
 def addHappySong():
@@ -379,5 +404,8 @@ def addPartySong():
     return render_template("about.html", auth=headers, email=email, song_uri=new_uri)
 
 if __name__ == '__main__':
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
+    sess.init_app(app)
     app.debug = True
     app.run()
