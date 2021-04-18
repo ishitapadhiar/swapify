@@ -285,7 +285,7 @@ def addPlaylist(form):
     return p1
 
 @app.route('/nextSong', methods=['GET'])
-def nextSong(token, email, uri):
+def nextSong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
@@ -309,7 +309,7 @@ def addHappySong():
     email = request.form['email']
     uri = request.form['uri']
     length = request.form['length']
-    print("email", email)
+    # print("email", email)
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -320,7 +320,7 @@ def addHappySong():
     u1.happy_music.append(s1)
     db.session.commit()
 
-    return nextSong(token, email, uri)
+    return nextSong()
     
 
 
@@ -341,7 +341,7 @@ def addSadSong():
     
     u1.happy_music.append(s1)
     db.session.commit()    
-    return nextSong(token, email, uri)
+    return nextSong()
 
 @app.route('/addStudySong', methods=['POST'])
 def addStudySong():
@@ -359,7 +359,7 @@ def addStudySong():
     
     u1.happy_music.append(s1)
     db.session.commit()
-    return  (token, email, uri)
+    return  nextSong()
 
 @app.route('/addPartySong', methods=['POST'])
 def addPartySong():
@@ -378,7 +378,7 @@ def addPartySong():
     u1.happy_music.append(s1)
     db.session.commit()
 
-    return nextSong(token, email, uri)
+    return nextSong()
 
 if __name__ == '__main__':
     app.debug = True
