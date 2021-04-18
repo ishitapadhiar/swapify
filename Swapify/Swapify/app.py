@@ -285,7 +285,7 @@ def addPlaylist(form):
     return p1
 
 @app.route('/nextSong', methods=['GET'])
-def nextSong():
+def nextSong(token, email, uri):
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
@@ -308,8 +308,8 @@ def addHappySong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    length = request.form['length']
-    # print("email", email)
+    length = round(int(request.form['length']) / 60000)
+    print(type(int(length)))
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -320,7 +320,7 @@ def addHappySong():
     u1.happy_music.append(s1)
     db.session.commit()
 
-    return nextSong()
+    return nextSong(token, email, uri)
     
 
 
@@ -330,7 +330,7 @@ def addSadSong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    length = request.form['durationms']
+    length = round(int(request.form['length']) / 60000)
     
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
@@ -341,7 +341,7 @@ def addSadSong():
     
     u1.happy_music.append(s1)
     db.session.commit()    
-    return nextSong()
+    return nextSong(token, email, uri)
 
 @app.route('/addStudySong', methods=['POST'])
 def addStudySong():
@@ -349,7 +349,7 @@ def addStudySong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    length = request.form['durationms']
+    length = round(int(request.form['length']) / 60000)
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -359,7 +359,7 @@ def addStudySong():
     
     u1.happy_music.append(s1)
     db.session.commit()
-    return  nextSong()
+    return  (token, email, uri)
 
 @app.route('/addPartySong', methods=['POST'])
 def addPartySong():
@@ -367,7 +367,7 @@ def addPartySong():
     token = request.form['token']
     email = request.form['email']
     uri = request.form['uri']
-    length = request.form['durationms']
+    length = round(int(request.form['length']) / 60000)
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -378,7 +378,7 @@ def addPartySong():
     u1.happy_music.append(s1)
     db.session.commit()
 
-    return nextSong()
+    return nextSong(token, email, uri)
 
 if __name__ == '__main__':
     app.debug = True
