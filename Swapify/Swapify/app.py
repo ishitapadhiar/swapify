@@ -136,9 +136,11 @@ def user():
             last_name=u1.last_name,
             email=u1.email,
             spotify_auth= u1.spotify_auth,
-            id= u1.id
+            id= u1.id,
+            bio=u1.bio
         )
     elif request.method == 'GET':
+        #request the user row using id from cookie
         print(request.args)
         rid = request.args.get('id')
         u1 = User.query.filter_by(id=rid).first()
@@ -147,7 +149,8 @@ def user():
             last_name=u1.last_name,
             email=u1.email,
             spotify_auth= u1.spotify_auth,
-            id= u1.id
+            id= u1.id,
+            bio = u1.bio
         )
     #for edit profile
     elif request.method == 'PUT':

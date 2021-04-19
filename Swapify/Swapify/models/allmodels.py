@@ -50,6 +50,7 @@ class User(db.Model):
 	last_name = db.Column(db.String)
 	email = db.Column(db.String)
 	spotify_auth = db.Column(db.String)
+	bio = db.Column(db.String)
 	playlists = db.relationship('Playlist', backref = 'user', lazy = True)
 
 	happy_music = db.relationship('Song', backref='happyusers', lazy='dynamic', secondary=happymusiclist)
@@ -64,11 +65,12 @@ class User(db.Model):
         secondaryjoin=(friends.c.user2_id == id),
         backref=db.backref('friends', lazy='dynamic'), lazy='dynamic')
 
-	def __init__(self, first_name=None, last_name= None, email = None, spotify_auth = None):
+	def __init__(self, first_name=None, last_name= None, email = None, spotify_auth = None, bio = None):
 		self.first_name = first_name
 		self.last_name = last_name
 		self.email = email
 		self.spotify_auth = spotify_auth
+		self.bio = bio
 
 class Playlist(db.Model):
 
