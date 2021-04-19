@@ -22,11 +22,12 @@ function getIDCookie() {
     return "";
 }
 
-$(function () { 
+$(function () {
     var tdata = {
         id: getIDCookie()
     }
     $.ajax({
+        async: false,
         url: "/user",
         type: 'GET',
         dataType: "json",
@@ -34,7 +35,7 @@ $(function () {
         data: tdata,
         success: function (data) {
             console.log(data);
-            ACCESS_TOKEN = data.spotify_auth   
+            ACCESS_TOKEN = data.spotify_auth
             //creates endpoint
             endpoint = SONG_API_ENDPOINT + document.getElementById('genre').innerHTML;
             const fetchOptions = {
@@ -53,7 +54,7 @@ $(function () {
                 console.log(new_uri);
                 //fills in Mood Match page HTML with specific song info to play
                 document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
-                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
+                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']
                 document.getElementById('genre').innerHTML = document.getElementById('genre').innerHTML;
 
             }).catch(function (error) {
@@ -84,6 +85,7 @@ function addSong(mood) {
         id: getIDCookie()
     }
     $.ajax({
+        async: false,
         url: "/user",
         type: 'GET',
         dataType: "json",
@@ -93,7 +95,7 @@ function addSong(mood) {
             console.log(data);
             ACCESS_TOKEN = data.spotify_auth
             //gets current song ID and length to add to playlist
-            let url = document.getElementById("songPlayer").src; 
+            let url = document.getElementById("songPlayer").src;
             let song_length = document.getElementById("length").innerHTML;
             song_uri = url.split("track/")[1];
 
@@ -106,6 +108,7 @@ function addSong(mood) {
             }
             console.log(songData);
             $.ajax({
+                async: false,
                 url: moodRoute,
                 type: 'POST',
                 dataType: "json",
@@ -128,7 +131,7 @@ function addSong(mood) {
                         new_uri = (json['tracks'][0]['uri'].split(":")[2])
                         console.log(new_uri);
                         document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
-                        document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
+                        document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']
                         document.getElementById('genre').innerHTML = document.getElementById('genre').innerHTML;
                     }).catch(function (error) {
                         console.log(error);
@@ -137,7 +140,7 @@ function addSong(mood) {
                 },
             });
 
-            
+
 
         }
 
@@ -152,6 +155,7 @@ function addGenre(genre) {
         id: getIDCookie()
     }
     $.ajax({
+        async: false,
         url: "/user",
         type: 'GET',
         dataType: "json",
@@ -174,9 +178,9 @@ function addGenre(genre) {
                 new_uri = (json['tracks'][0]['uri'].split(":")[2])
                 console.log(new_uri);
                 document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
-                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
+                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']
                 document.getElementById('genre').innerHTML = genre;
-        
+
             }).catch(function (error) {
                 console.log(error);
             });
