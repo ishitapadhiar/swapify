@@ -105,51 +105,25 @@
         <input style="margin-bottom:25px" type="search" placeholder="Search..">
         <div >
                 <iframe id="songPlayer"  width="400" height="480" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>  
+                <p hidden id="length"></p>
             </div>
               
             <div class="tcontrols" style="margin-top: 20px;">
-                <form action="{{url_for('addHappySong') }}" method="post">
-                    <div class="tyes btn" >
-                            <i class="fas fa-smile-beam" aria-hidden="true"></i>
-                            <input type="hidden" name="token" value="{{auth}}">
-                            <input type="hidden" name="email" value="{{email}}">
-                            <input type="hidden" name="uri" value="{{song_uri}}">
-                            <input type="hidden" name="length" value="{{length}}">
-                            <input type="submit">
-                    </div>
-                </form>
-                <form action="{{url_for('addSadSong') }}" method="post">
-                    <div class="tyes btn">
-                        <i class="	fas fa-frown" aria-hidden="true"></i>
-                        <input type="hidden" name="token" value="{{auth}}">
-                        <input type="hidden" name="email" value="{{email}}">
-                        <input type="hidden" name="uri" value="{{song_uri}}">
-                        <input type="hidden" name="length" value="{{length}}">
-                        <input type="submit">
-                        
-                    </div>
-                </form>
+                <div class="tyes btn" >
+                        <i class="fas fa-smile-beam" onclick="addSong('happy');" aria-hidden="true"></i>
+                </div>
+    
+                <div class="tyes btn">
+                    <i class="	fas fa-frown" onclick="addSong('sad');" aria-hidden="true"></i>
+                </div>
                 <br>
-                <form action="{{url_for('addStudySong') }}" method="post">
-                    <div class="tyes btn">
-                        <i class="fas fa-book-open" style="margin-left: -25px;" aria-hidden="true"></i>
-                        <input type="hidden" name="token" value="{{auth}}">
-                        <input type="hidden" name="email" value="{{email}}">
-                        <input type="hidden" name="uri" value="{{song_uri}}">
-                        <input type="hidden" name="length" value="{{length}}">
-                        <input type="submit">
-                    </div>
-                </form>
-                <form action="{{url_for('addPartySong') }}" method="post">
-                    <div class="tyes btn"  >
-                        <i class="fas fa-birthday-cake" style="margin-left: -15px;"  aria-hidden="true"></i>
-                        <input type="hidden" name="token" value="{{auth}}">
-                        <input type="hidden" name="email" value="{{email}}">
-                        <input type="hidden" name="uri" value="{{song_uri}}">
-                        <input type="hidden" name="length" value="{{length}}">
-                        <input type="submit">
-                    </div>
-                </form>
+                <div class="tyes btn">
+                    <i class="fas fa-book-open" onclick="addSong('study');" style="margin-left: -25px;" aria-hidden="true"></i>
+                </div>
+     
+                <div class="tyes btn"  >
+                    <i class="fas fa-birthday-cake" onclick="addSong('party');" style="margin-left: -15px;"  aria-hidden="true"></i>
+                </div>
             </div>
         </div>
     </body>

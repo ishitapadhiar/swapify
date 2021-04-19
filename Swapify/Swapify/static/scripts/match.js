@@ -51,6 +51,7 @@ $(function () {
                 new_uri = (json['tracks'][0]['uri'].split(":")[2])
                 console.log(new_uri);
                 document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
+                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
         
             }).catch(function (error) {
                 console.log(error);
@@ -60,12 +61,83 @@ $(function () {
 
     });
 
-    
-    //spotify fetch random song endpoint
-    //return song uri
-    //initialize spotify player object with random song uri from ^
 })
 
+function addSong(mood) {
+    let moodRoute;
+    if (mood == "happy"){
+        moodRoute = '/addHappySong';
+    }
+    if (mood == "sad"){
+        moodRoute = '/addSadSong';
+    }
+    if (mood == "study"){
+        moodRoute = '/addStudySong';
+    }
+    if (mood == "party"){
+        moodRoute = '/addPartySong';
+    }
+    var tdata = {
+        id: getIDCookie()
+    }
+    $.ajax({
+        url: "/user",
+        type: 'GET',
+        dataType: "json",
+        contentType: "application/json",
+        data: tdata,
+        success: function (data) {
+            console.log(data);
+            ACCESS_TOKEN = data.spotify_auth
+            let url = document.getElementById("songPlayer").src;
+            let song_length = document.getElementById("length").innerHTML;
+            song_uri = url.split("track/")[1];
+            console.log(song_uri);
+            console.log(song_length)
+
+            var songData = {
+                token: data.spotify_auth,
+                email: data.email,
+                uri: song_uri,
+                length: song_length
+            }
+            console.log(songData);
+            $.ajax({
+                url: moodRoute,
+                type: 'POST',
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(songData),
+                success: function (sData) {
+                    console.log(sData)
+                    const fetchOptions = {
+                        method: 'GET',
+                        headers: new Headers({
+                            'Authorization': `Bearer ${ACCESS_TOKEN}`
+                        })
+                    };
+                    fetch(SONG_API_ENDPOINT, fetchOptions).then(function (response) {
+                        return response.json();
+                    }).then(function (json) {
+                        console.log(json);
+                        new_uri = (json['tracks'][0]['uri'].split(":")[2])
+                        console.log(new_uri);
+                        document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
+                        document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
+                
+                    }).catch(function (error) {
+                        console.log(error);
+                    });
+
+                },
+            });
+
+            
+
+        }
+
+    });
+}
 //onclick nextsong
     //ajax to get access token -token, email
         //on success
