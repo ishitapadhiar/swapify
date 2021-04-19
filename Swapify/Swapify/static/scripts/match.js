@@ -65,3 +65,9 @@ $(function () {
     //return song uri
     //initialize spotify player object with random song uri from ^
 })
+
+//onclick nextsong
+    //ajax to get access token -token, email
+        //on success
+            //post to the playlists
+            //spotify api call to get uri document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
