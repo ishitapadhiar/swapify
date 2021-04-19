@@ -13,8 +13,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!--NEEDED for ajax, not from layout extension? TODO-->
-<div>
+
+<div style="margin-top:30px;>
+
     <div class="row">
+
         <div class="col-md-6">
             <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div>
         </div>
@@ -56,51 +59,32 @@
             </div>
         </div>
     </div>
+    <br>
+    <br />
     <div id="profile">
         <div class="row" style="margin-top: 20px">
             <div class="col-md-6">
-                <h4>[[items.name]]</h4>
-                <div class="inputs">
-                    <input class="form-control" type="text" placeholder="First Name" name="first">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h4>Last Name</h4>
-                <div class="inputs">
-                    <input class="form-control" type="text" placeholder="Last Name" name="last">
-                </div>
-            </div>
-        </div>
-    </div>
-    <form action="{{url_for('user') }}" method="post">
-        <div class="row" style="margin-top: 20px">
-            <div class="col-md-6">
-                <h4>First Name</h4>
-                <div class="inputs">
-
-                    <input class="form-control" type="text" placeholder="First Name" name="first">
-                </div>
-            </div>
-            <div class="col-md-6">
-                <h4>Last Name</h4>
-                <div class="inputs">
-                    <input class="form-control" type="text" placeholder="Last Name" name="last">
-                </div>
+                <h4>Name: [[items.first_name]]</h4>
+                <h4>Email: [[items.email]]</h4>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h4>Bio</h4>
+                <h4>Bio: [[items.bio || "No Bio"]]</h4>
                 <div class="about-inputs">
-                    <textarea class="form-control" type="text" placeholder="Tell us about yourself" name="bio">{{bio}}</textarea>
+                    <textarea class="form-control" type="text" placeholder="Tell us about yourself" name="bio" v-model="items.bio" v-if="isEdit"></textarea>
                 </div>
             </div>
         </div>
-        <br>
-        <input class="px-3 btn btn-sm btn-outline-primary" style="margin-left: 400px; margin-right: 20px;" type="submit" value="Save">
-    </form>
-    <div><button class="px-3 btn btn-sm btn-primary" onclick="window.location.href = 'http://localhost:5555/login'">Log Out</button> </div>
-    
+
+        <button v-on:click="isEdit = !isEdit" v-if="!isEdit">Edit</button>
+        <button v-on:click="savebio" v-else-if="isEdit" >Save</button>
+        <button v-if="isEdit" v-on:click="isEdit = false">Cancel</button>
+    </div> <!--end vue app-->
+    <br>
 </div>
+
+<div><button class="px-3 btn btn-sm btn-primary" onclick="window.location.href = 'http://localhost:5000/login'">Log Out</button> </div>
+
 <script src="/static/scripts/profile.js"></script>
 {% endblock %}

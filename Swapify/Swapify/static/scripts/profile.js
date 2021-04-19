@@ -8,7 +8,16 @@ var app = new Vue({
     el: "#profile",
     delimiters: ['[[', ']]'],
     data: {
+        isEdit: false,
+        counter: 0,
         items: []
+    },
+    methods: {
+        savebio: function () {
+            this.isEdit = !this.isEdit;
+            this.counter++;
+            console.log("saving");
+        }
     },
     created: function () {
         console.log("in mount");
@@ -25,7 +34,8 @@ var app = new Vue({
             }
 
         });
-    }
+    },
+
 });
 
 
