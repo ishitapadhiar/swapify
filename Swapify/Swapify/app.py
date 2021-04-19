@@ -13,6 +13,7 @@ from flask import redirect
 from urllib.parse import quote
 import json
 import spotipy
+from flask import jsonify
 
 os.environ['DBUSER'] = 'usxuxwby' 
 os.environ['DBPASS'] = 'sVUyUo4Z1aqH4MiKkLQtWlw8RNMhaq-H'
@@ -112,42 +113,35 @@ def profile():
 def user():
     print("message recieved")
     print(request)
-    rspotify_auth = request.json['token']
-    remail = request.json['email']
-    rname = request.json['display_name']
-    
 
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
     if request.method == 'POST':
-        #u1 = User.query.filter_by(email=remail).first()
-        #if u1 is None:
-            #u1 = User(rname, rname, remail, spotify_auth)
-            #db.session.add(u1)
-            #db.session.commit()
-        x = {
-            "name": rname,
-            "email": remail,
-            "token": rspotify_auth,
-            "id": 15
-            }
-        ret = json.dumps(x)
-        #should pass back an id for front end to make a cookie
-        return x
-
-
-    if request.method == 'GET':
-        print("profile requested")
-        x = {
-            "name": rname,
-            "email": remail,
-            "token": rspotify_auth,
-            "id": 15
-            }
-        ret = json.dumps(x)
-        return ret
-    #back end stuff
+        rspotify_auth = request.json['token']
+        remail = request.json['email']
+        rname = request.json['display_name']
         u1 = User.query.filter_by(email=remail).first()
+        if u1 is None:
+            u1 = User(rname, rname, remail, rspotify_auth)
+            db.session.add(u1)
+            db.session.commit()
+        else:
+            #overwrite the spotify auth
+            u1.spotify_auth = rspotify_auth
+            db.session.commit()
+        u1 = User.query.filter_by(email=remail).first()    
+        #should pass back an id for front end to make a cookie
+        return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id
+        )
+    elif request.method == 'GET':
+        print(request.args)
+        rid = request.args.get('id')
+        u1 = User.query.filter_by(id=rid).first()
         return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
@@ -156,7 +150,7 @@ def user():
             id= u1.id
         )
     #for edit profile
-    if request.method == 'PUT':
+    elif request.method == 'PUT':
         u1 = User.query.filter_by(email=email).first()
         # add the changedFields dictionary by parsing the object from the function
         if 'first' in changedFields.keys():

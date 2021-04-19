@@ -68,7 +68,7 @@ class User(db.Model):
 		self.first_name = first_name
 		self.last_name = last_name
 		self.email = email
-		self.url = None
+		self.spotify_auth = spotify_auth
 
 class Playlist(db.Model):
 

@@ -1,26 +1,27 @@
 // JavaScript source code
 
-tdata = {
-    id : "17"
+var tdata = {
+    id: getIDCookie(),
 }
 
 var app = new Vue({
-    el: "profile",
+    el: "#profile",
     delimiters: ['[[', ']]'],
     data: {
         items: []
     },
     created: function () {
-        id = getIDCookie()
         console.log("in mount");
+        var self = this;
         $.ajax({
             url: "/user",
             type: 'GET',
             dataType: "json",
             contentType: "application/json",
             data: tdata,
-            success: function () {
-                console.log("vue created");
+            success: function (data) {
+                console.log(data);
+                self.items = data;
             }
 
         });
@@ -46,5 +47,7 @@ function getIDCookie() {
 }
 
 $(function () {
-    console.log("MY id is: "+getIDCookie())
+    console.log("MY id is: " + getIDCookie())
+
+    
 })
