@@ -1,6 +1,6 @@
 // JavaScript source code
 
-const SONG_API_ENDPOINT = "https://api.spotify.com/v1/recommendations?seed_genres=pop";
+const SONG_API_ENDPOINT = "https://api.spotify.com/v1/recommendations?seed_genres=";
 let ACCESS_TOKEN;
 let new_uri;
 
@@ -37,6 +37,7 @@ $(function () {
         success: function (data) {
             console.log(data);
             ACCESS_TOKEN = data.spotify_auth
+            endpoint = SONG_API_ENDPOINT + document.getElementById('genre').innerHTML;
 
             const fetchOptions = {
                 method: 'GET',
@@ -44,7 +45,7 @@ $(function () {
                     'Authorization': `Bearer ${ACCESS_TOKEN}`
                 })
             };
-            fetch(SONG_API_ENDPOINT, fetchOptions).then(function (response) {
+            fetch(endpoint, fetchOptions).then(function (response) {
                 return response.json();
             }).then(function (json) {
                 console.log(json);
@@ -52,7 +53,8 @@ $(function () {
                 console.log(new_uri);
                 document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
                 document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
-        
+                document.getElementById('genre').innerHTML = document.getElementById('genre').innerHTML;
+
             }).catch(function (error) {
                 console.log(error);
             });
@@ -60,7 +62,6 @@ $(function () {
         }
 
     });
-
 })
 
 function addSong(mood) {
@@ -110,13 +111,14 @@ function addSong(mood) {
                 data: JSON.stringify(songData),
                 success: function (sData) {
                     console.log(sData)
+                    endpoint = SONG_API_ENDPOINT + document.getElementById('genre').innerHTML;
                     const fetchOptions = {
                         method: 'GET',
                         headers: new Headers({
                             'Authorization': `Bearer ${ACCESS_TOKEN}`
                         })
                     };
-                    fetch(SONG_API_ENDPOINT, fetchOptions).then(function (response) {
+                    fetch(endpoint, fetchOptions).then(function (response) {
                         return response.json();
                     }).then(function (json) {
                         console.log(json);
@@ -124,7 +126,7 @@ function addSong(mood) {
                         console.log(new_uri);
                         document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
                         document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
-                
+                        document.getElementById('genre').innerHTML = document.getElementById('genre').innerHTML;
                     }).catch(function (error) {
                         console.log(error);
                     });
@@ -138,8 +140,42 @@ function addSong(mood) {
 
     });
 }
-//onclick nextsong
-    //ajax to get access token -token, email
-        //on success
-            //post to the playlists
-            //spotify api call to get uri document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
+
+function addGenre(genre) {
+    var tdata = {
+        id: getIDCookie()
+    }
+    $.ajax({
+        url: "/user",
+        type: 'GET',
+        dataType: "json",
+        contentType: "application/json",
+        data: tdata,
+        success: function (data) {
+            console.log(data);
+            ACCESS_TOKEN = data.spotify_auth
+            endpoint = SONG_API_ENDPOINT + genre;
+            const fetchOptions = {
+                method: 'GET',
+                headers: new Headers({
+                    'Authorization': `Bearer ${ACCESS_TOKEN}`
+                })
+            };
+            fetch(endpoint, fetchOptions).then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                console.log(json);
+                new_uri = (json['tracks'][0]['uri'].split(":")[2])
+                console.log(new_uri);
+                document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
+                document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
+                document.getElementById('genre').innerHTML = genre;
+        
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+        }
+
+    });
+}
