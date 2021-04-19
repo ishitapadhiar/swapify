@@ -14,7 +14,7 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!--NEEDED for ajax, not from layout extension? TODO-->
 <div>
-    <div class="row">
+    <div class="row" style="margin-top:100px">
         <div class="col-md-6">
             <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div>
         </div>
@@ -38,11 +38,11 @@
 
                         <div class="modal-body">
                             <div class="inputs">
-                                <form action="{{url_for('addFriend') }}" method="post">
+                                <form name="friendForm" action="#" method="GET" >
                                     <label style="color: black">Enter Friend's Spotify Email</label>
                                     <input class="form-control inputs" type="text" name="friendName">
                                     <br>
-                                    <input class="btn btn-primary" type="submit" value="Submit">
+                                    <input class="btn btn-primary"  onclick="addFriend(this.form)" type="submit" value="Submit">
                                 </form>
                             </div>
                         </div>

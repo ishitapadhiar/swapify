@@ -186,14 +186,17 @@
     </style>
     <body>
         <script src="/static/scripts/match.js"></script>
+        <!-- Search bar -->
         <input style="margin-top: 60px; margin-bottom: 25px" type="search" placeholder="Search..">
         <div >
+                <!-- Music player and related information -->
                 <iframe id="songPlayer"  width="400" height="480" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>  
                 <p hidden id="length"></p>
                 <p hidden id="genre">pop</p>
             </div>
               
             <div class="tcontrols" style="margin-top: 5px;">
+                <!-- All four mood buttons -->
                 <div class="tyes btn" >
                         <i class="fas fa-smile-beam" onclick="addSong('happy');" aria-hidden="true"></i>
                 </div>
@@ -211,6 +214,7 @@
                 </div>
             </div>
             <div style="padding-top: 80px">
+                <!-- Genre buttons -->
                 <button class="big-button" style="height:80px;" onclick="addGenre('pop')" >POP</button>
                 <button class="big-button" style="height:80px;" onclick="addGenre('rock')">ROCK</button>
                 <button class="big-button" style="height:80px;" onclick="addGenre('k-pop')">KPOP</button>

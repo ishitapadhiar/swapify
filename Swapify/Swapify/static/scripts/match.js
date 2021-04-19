@@ -5,6 +5,7 @@ let ACCESS_TOKEN;
 let new_uri;
 
 function getIDCookie() {
+    //return access token from cookie
     var name = "SwapifyID=";
     var path = ",path=/";
     var decodedCookie = decodeURIComponent(document.cookie);
@@ -21,10 +22,7 @@ function getIDCookie() {
     return "";
 }
 
-$(function () {
-    console.log("My id is: " + getIDCookie())
-    //use cookie to get user row from db, including access token
-    //use access token to make spotify endpoint calls
+$(function () { 
     var tdata = {
         id: getIDCookie()
     }
@@ -36,21 +34,24 @@ $(function () {
         data: tdata,
         success: function (data) {
             console.log(data);
-            ACCESS_TOKEN = data.spotify_auth
+            ACCESS_TOKEN = data.spotify_auth   
+            //creates endpoint
             endpoint = SONG_API_ENDPOINT + document.getElementById('genre').innerHTML;
-
             const fetchOptions = {
                 method: 'GET',
                 headers: new Headers({
                     'Authorization': `Bearer ${ACCESS_TOKEN}`
                 })
             };
+            //gets endpoint and json of reccommended song data
             fetch(endpoint, fetchOptions).then(function (response) {
                 return response.json();
             }).then(function (json) {
                 console.log(json);
+                //obtains spotify song ID
                 new_uri = (json['tracks'][0]['uri'].split(":")[2])
                 console.log(new_uri);
+                //fills in Mood Match page HTML with specific song info to play
                 document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
                 document.getElementById("length").innerHTML = json['tracks'][0]['duration_ms']  
                 document.getElementById('genre').innerHTML = document.getElementById('genre').innerHTML;
@@ -66,6 +67,7 @@ $(function () {
 
 function addSong(mood) {
     let moodRoute;
+    //series of if statements to help determine which flask route to call
     if (mood == "happy"){
         moodRoute = '/addHappySong';
     }
@@ -90,13 +92,13 @@ function addSong(mood) {
         success: function (data) {
             console.log(data);
             ACCESS_TOKEN = data.spotify_auth
-            let url = document.getElementById("songPlayer").src;
+            //gets current song ID and length to add to playlist
+            let url = document.getElementById("songPlayer").src; 
             let song_length = document.getElementById("length").innerHTML;
             song_uri = url.split("track/")[1];
-            console.log(song_uri);
-            console.log(song_length)
 
             var songData = {
+                //all the data that will be used in the flask route
                 token: data.spotify_auth,
                 email: data.email,
                 uri: song_uri,
@@ -111,6 +113,7 @@ function addSong(mood) {
                 data: JSON.stringify(songData),
                 success: function (sData) {
                     console.log(sData)
+                    //creates endpoint URL
                     endpoint = SONG_API_ENDPOINT + document.getElementById('genre').innerHTML;
                     const fetchOptions = {
                         method: 'GET',
@@ -121,7 +124,7 @@ function addSong(mood) {
                     fetch(endpoint, fetchOptions).then(function (response) {
                         return response.json();
                     }).then(function (json) {
-                        console.log(json);
+                        //gets next song info and updates HTML file
                         new_uri = (json['tracks'][0]['uri'].split(":")[2])
                         console.log(new_uri);
                         document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
@@ -142,6 +145,9 @@ function addSong(mood) {
 }
 
 function addGenre(genre) {
+    //This function specifies genre of displayed songs
+    //Songs will stay the same genre unless specified differently
+    //genre is passed in as an argument
     var tdata = {
         id: getIDCookie()
     }

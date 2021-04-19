@@ -113,7 +113,6 @@ def profile():
 def user():
     print("message recieved")
     print(request)
-
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
     if request.method == 'POST':
@@ -173,11 +172,13 @@ def addFriend():
     # user that they want to add as a friend (u2_email)
     if request.method == 'POST':
         #gets friend's email; should check if it's valid
-        friend = request.form['friendName']
+        u1_email = request.json['userEmail']
+        u2_email = request.json['friendEmail']
     u1 = User.query.filter_by(email=u1_email).first()
     u2 = User.query.filter_by(email=u2_email).first()
     u1.friended.append(u2)
     db.session.commit()
+    return jsonify( first_name=u1.first_name )
 
 @app.route('/newSong', methods=['POST'])
 def addSong(form):
@@ -195,23 +196,6 @@ def addPlaylist(form):
     db.session.add(p1)
     db.session.commit()
     return p1
-
-# @app.route('/nextSong', methods=['GET'])
-# def nextSong():
-#     token = request.form['token']
-#     email = request.form['email']
-#     uri = request.form['uri']
-
-#     access_token = token.split('Bearer ')
-#     access_token = (access_token[1][:len(access_token)-4])
-#     headers = {"Authorization": f"Bearer {access_token}"}
-#     endpoint = "https://api.spotify.com/v1/recommendations?seed_genres=pop"
-#     response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-#     resp_data = response.json()
-#     new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
-#     length = resp_data['tracks'][0]['duration_ms']  
-#     return render_template("about.html", auth=headers, email=email, song_uri=new_uri, length= length)
-
 
 @app.route('/addHappySong', methods=['POST'])
 def addHappySong():
