@@ -1,7 +1,8 @@
 // JavaScript source code
 
-
-
+const SONG_API_ENDPOINT = "https://api.spotify.com/v1/recommendations?seed_genres=pop";
+let ACCESS_TOKEN;
+let new_uri;
 
 function getIDCookie() {
     var name = "SwapifyID=";
@@ -21,12 +22,11 @@ function getIDCookie() {
 }
 
 $(function () {
-    console.log("MY id is: " + getIDCookie())
+    console.log("My id is: " + getIDCookie())
     //use cookie to get user row from db, including access token
     //use access token to make spotify endpoint calls
-
     var tdata = {
-        cookie: "1"
+        id: getIDCookie()
     }
     $.ajax({
         url: "/user",
@@ -34,16 +34,33 @@ $(function () {
         dataType: "json",
         contentType: "application/json",
         data: tdata,
-        async: false,
         success: function (data) {
-            console.log("vue created");
-            //data.spotifyauth access token
-            //save the token to a local var
-            
+            console.log(data);
+            ACCESS_TOKEN = data.spotify_auth
+
+            const fetchOptions = {
+                method: 'GET',
+                headers: new Headers({
+                    'Authorization': `Bearer ${ACCESS_TOKEN}`
+                })
+            };
+            fetch(SONG_API_ENDPOINT, fetchOptions).then(function (response) {
+                return response.json();
+            }).then(function (json) {
+                console.log(json);
+                new_uri = (json['tracks'][0]['uri'].split(":")[2])
+                console.log(new_uri);
+                document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
+        
+            }).catch(function (error) {
+                console.log(error);
+            });
 
         }
 
     });
+
+    
     //spotify fetch random song endpoint
     //return song uri
     //initialize spotify player object with random song uri from ^
