@@ -80,11 +80,8 @@ function getIDCookie() {
 
 function addFriend() {
     var remail = document.forms["friendForm"]["friendName"].value;
-    // e.preventDefault();
-
     if (remail == "") {
         alert("Email must be filled out.");
-        // return false;
       }
       var tdata = {
         id: getIDCookie()
@@ -104,7 +101,6 @@ function addFriend() {
                 friendEmail: remail
             }
             console.log(userData);
-                    
             $.ajax({
                 async: false,
                 url: "/addFriend",
@@ -115,17 +111,13 @@ function addFriend() {
                 success: function() {
                     console.log("friend added");
                     alert("Friend added!");
-                    // return true;
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     alert("Error: User does not exist or user has already been added");
-                    // return false;
                 }
             });         
         }
     });
-    // e.preventDefault();
-
 }
 
 $(function () {
