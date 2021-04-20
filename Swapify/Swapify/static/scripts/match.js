@@ -60,7 +60,10 @@ $(function () {
             }).catch(function (error) {
                 console.log(error);
             });
-
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //if adding a friend causes an error
+            alert("Error: cannot load song");
         }
 
     });
@@ -85,6 +88,7 @@ function addSong(mood) {
         id: getIDCookie()
     }
     $.ajax({
+        //calls user route to get user token and email
         async: false,
         url: "/user",
         type: 'GET',
@@ -108,6 +112,7 @@ function addSong(mood) {
             }
             console.log(songData);
             $.ajax({
+                //calls mood route to post song information to add to database
                 async: false,
                 url: moodRoute,
                 type: 'POST',
@@ -127,7 +132,7 @@ function addSong(mood) {
                     fetch(endpoint, fetchOptions).then(function (response) {
                         return response.json();
                     }).then(function (json) {
-                        //gets next song info and updates HTML file
+                        //uses Spotify endpoints to get next song info and updates HTML file
                         new_uri = (json['tracks'][0]['uri'].split(":")[2])
                         console.log(new_uri);
                         document.getElementById("songPlayer").src = "https://open.spotify.com/embed/track/" + new_uri;
@@ -138,10 +143,11 @@ function addSong(mood) {
                     });
 
                 },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //if adding a song causes an error
+                    alert("Error: cannot add song");
+                }
             });
-
-
-
         }
 
     });
@@ -185,6 +191,10 @@ function addGenre(genre) {
                 console.log(error);
             });
 
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            //if choosing a genre causes an error
+            alert("Error: cannot select genre");
         }
 
     });
