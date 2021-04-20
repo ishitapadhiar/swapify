@@ -14,9 +14,28 @@ var app = new Vue({
     },
     methods: {
         savebio: function () {
-            this.isEdit = !this.isEdit;
-            this.counter++;
+            console.log("saving bio...");
+            var self = this;
+            console.log(self.items);
+            var sdata = {
+                token: self.items.spotify_auth,
+                display_name: self.items.first_name,
+                email: self.items.email,
+                bio: self.items.bio,
+            }
+            console.log(sdata);
+            $.ajax({
+                url: "/user",
+                type: 'POST',
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(sdata),
+                success: function (data) {
+                    console.log("post successful");
+                }
+            })
             console.log("saving");
+            this.isEdit = !this.isEdit;
         }
     },
     created: function () {

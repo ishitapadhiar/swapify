@@ -121,13 +121,16 @@ def user():
         remail = request.json['email']
         rname = request.json['display_name']
         u1 = User.query.filter_by(email=remail).first()
-        if u1 is None:
+        if u1 is None: #user not in db
             u1 = User(rname, rname, remail, rspotify_auth)
             db.session.add(u1)
             db.session.commit()
-        else:
+        else: #updating
             #overwrite the spotify auth
             u1.spotify_auth = rspotify_auth
+            if 'bio' in request.json: 
+                rbio = request.json['bio']
+                u1.bio = rbio
             db.session.commit()
         u1 = User.query.filter_by(email=remail).first()    
         #should pass back an id for front end to make a cookie
@@ -152,18 +155,6 @@ def user():
             id= u1.id,
             bio = u1.bio
         )
-    #for edit profile
-    elif request.method == 'PUT':
-        u1 = User.query.filter_by(email=email).first()
-        # add the changedFields dictionary by parsing the object from the function
-        if 'first' in changedFields.keys():
-            u1.first_name = changedFields['first']
-        if 'last' in changedFields.keys():
-            u1.last_name = changedFields['last']
-        if 'auth' in changedFields.keys():
-            u1.spotify_auth = changedFields['auth']
-            
-        db.session.commit()
 
     return u1
 
