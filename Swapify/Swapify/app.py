@@ -111,6 +111,8 @@ def profile():
         message='Settings'
     )
 
+
+
 @app.route('/user', methods = ['POST', 'GET', 'PUT'])
 def user():
     print("message recieved")
@@ -133,7 +135,27 @@ def user():
                 rbio = request.json['bio']
                 u1.bio = rbio
             db.session.commit()
-        u1 = User.query.filter_by(email=remail).first()    
+        u1 = User.query.filter_by(email=remail).first()
+        happysongs = []
+        for song in u1.happy_music:
+            print(song.spotify_id)
+            happysongs.append(song.spotify_id)
+
+        sadsongs = []
+        for song in u1.sad_music:
+            print(song.spotify_id)
+            sadsongs.append(song.spotify_id)
+
+        studysongs = []
+        for song in u1.study_music:
+            print(song.spotify_id)
+            studysongs.append(song.spotify_id)
+
+        partysongs = []
+        for song in u1.party_music:
+            print(song.spotify_id)
+            partysongs.append(song.spotify_id)
+
         #should pass back an id for front end to make a cookie
         return jsonify(
             first_name=u1.first_name,
@@ -141,20 +163,26 @@ def user():
             email=u1.email,
             spotify_auth= u1.spotify_auth,
             id= u1.id,
-            bio=u1.bio
+            bio=u1.bio,
+            happysongs = happysongs
         )
     elif request.method == 'GET':
         #request the user row using id from cookie
         print(request.args)
         rid = request.args.get('id')
         u1 = User.query.filter_by(id=rid).first()
+        happysongs = []
+        for song in u1.happy_music:
+            print(song.spotify_id)
+            happysongs.append(song.spotify_id)
         return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
             email=u1.email,
             spotify_auth= u1.spotify_auth,
             id= u1.id,
-            bio = u1.bio
+            bio = u1.bio,
+            happysongs = happysongs
         )
 
     return u1
@@ -197,6 +225,7 @@ def generateNewPlaylist(form):
     generator = PlaylistGenerator(email)
     generator.generate_user_playlist(name, mood, friends, time, numSongs)
 
+
 @app.route('/getPlaylist', methods=['GET'])
 def getPlaylist(form):
     email = request.form['email']
@@ -218,7 +247,7 @@ def getPlaylist(form):
                 songs = spotifySongId
             )
 
-    return jsonify( error = "No matches", name = playlistName,)
+    return jsonify( error = "No matches", name = playlistName)
 
 
 
@@ -241,14 +270,15 @@ def addHappySong():
     # print("email", email)
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
+    print(s1)
     if s1 is None:
         s1 = Song(uri, length)
+        print(s1)
         db.session.add(s1)
         db.session.commit()
     
     u1.happy_music.append(s1)
     db.session.commit()
-
     return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
