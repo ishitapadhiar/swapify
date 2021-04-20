@@ -226,18 +226,17 @@ ul li a.active {
   background-repeat: no-repeat;
 }
 </style>
-    <!-- {% for item in sorted_array%}
-    <p> {{ item }} </p>
-    {% endfor %} -->
 <body>
 	<div style="padding-top: 150px">
 	</div>
 <div style="background:#DC51BC; padding-top:10px; margin-left: 80px; margin-right: 80px; margin-bottom: 100px" class="jumbotron">
+    <!-- Dark mode jumbotron -->
     <div class="col text-center">
         <h1 style="font-family: 'Montserrat', sans-serif; font-weight: 700">Welcome</h1>
         <p>
             You have successfully logged in and may start using Swapify. Toggle between dark and light mode here
         </p>
+        <!-- button to toggle between light and dark mode -->
         <button type="button" class="btn btn-default" onclick="myFunction()">Toggle Modes</button>
         <script>
           function myFunction() {
@@ -250,8 +249,10 @@ ul li a.active {
 </div>
 
 <div id="tabs" style="padding-bottom: 450px">
+  <!-- HTML code that creates an accordion for the instructions on how to use Swapify -->
   <ul id="accordion">
     <li>
+      <!-- Mood Match Page -->
       <a class="active" href="#tabs-1">   <div class="tag">
           <div class="icon">
             <div class="block">
@@ -268,6 +269,7 @@ ul li a.active {
         </div>
     </li>
     <li>
+      <!-- Playlist page -->
       <a href="#tabs-2">   <div class="tag">
           <div class="icon">
             <div class="block">
@@ -284,6 +286,7 @@ ul li a.active {
         </div>
     </li>
     <li>
+      <!-- Profile page -->
       <a href="#tabs-3">   <div class="tag">
           <div class="icon">
             <div class="block">
@@ -315,23 +318,24 @@ ul li a.active {
 </body>
 
 <script>
-    $(function() {
-  $("#tabs").tabs({
-    show: { effect: "blind", direction: "right", duration: 300 }
-  });
-  $( "#accordion" ).accordion();
+  $(function() {
+    // function that helps go through each part of the instructions accordion
+    $("#tabs").tabs({
+      show: { effect: "blind", direction: "right", duration: 300 }
+    });
+    $( "#accordion" ).accordion();
 
-  var btn = $('#accordion li a');
-  var wrapper = $('#accordion li');
+    var btn = $('#accordion li a');
+    var wrapper = $('#accordion li');
 
-  $(btn).on('click', function() {
-    $(btn).removeClass('active');
-    $(btn).parent().find('.addon').removeClass('fadein');
-    
-    $(this).addClass('active');
-    $(this).parent().find('.addon').addClass('fadein');
+    $(btn).on('click', function() {
+      $(btn).removeClass('active');
+      $(btn).parent().find('.addon').removeClass('fadein');
+      
+      $(this).addClass('active');
+      $(this).parent().find('.addon').addClass('fadein');
+    });
   });
-});
 </script>
 
 <script src="/static/scripts/Spotify.js"></script>

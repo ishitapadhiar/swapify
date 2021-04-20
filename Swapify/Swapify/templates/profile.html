@@ -14,19 +14,18 @@
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!--NEEDED for ajax, not from layout extension? TODO-->
 <div>
     <div class="row" style="margin-top:100px">
+        <!-- Row for adding friend information -->
         <div class="col-md-6">
             <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div>
         </div>
         <div class="col-md-6">
-            <!--
-    <button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:10px;">
+            <!--<button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:10px;">
         <i class="fas fa-user-friends"></i> View Friends
-    </button>
-        -->
+            </button>-->
             <button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:20px;" data-toggle="modal" data-target="#addFriendModal">
                 <i class="fas fa-plus"></i> Add Friend
             </button>
-            <!-- Modal -->
+            <!-- Modal for adding a friend-->
             <div class="modal fade" id="addFriendModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -36,7 +35,6 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-
                         <div class="modal-body">
                             <div class="inputs">
                                 <form name="friendForm" action="#" method="GET">
@@ -49,8 +47,6 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <!-- <button type="button" class="btn btn-primary">Submit</button> -->
-
                         </div>
                     </div>
                 </div>
