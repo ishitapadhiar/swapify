@@ -4,11 +4,13 @@
 const API_ENDPOINT = 'https://api.spotify.com/v1/me';
 let ACCESS_TOKEN;
 
+//function used by getProfileInformation
 function getAccessToken() {
     const currentLocation = String(window.location).split('#')[1];
     const params = new URLSearchParams(currentLocation);
     return params;
 }
+//spotify api call to get user information i.e. email, name
 function getProfileInformation() {
     const currentQueryParameters = getAccessToken();
     ACCESS_TOKEN = currentQueryParameters.get('access_token');
@@ -51,11 +53,11 @@ function getProfileInformation() {
         console.log(error);
     });
 }
-
+//function to set cookie with db user ID
 function setIDCookie(id) {
     document.cookie = "SwapifyID=" + id + ",path=/";
 }
-
+//retrive the id from browser cookies
 function getIDCookie() {
     var name = "SwapifyID=";
     var decodedCookie = decodeURIComponent(document.cookie);

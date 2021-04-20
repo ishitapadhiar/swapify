@@ -3,7 +3,7 @@
 var tdata = {
     id: getIDCookie(),
 }
-
+//vue app for data bindings
 var app = new Vue({
     el: "#profile",
     delimiters: ['[[', ']]'],
@@ -14,6 +14,7 @@ var app = new Vue({
     },
     methods: {
         savebio: function () {
+            //save bio
             console.log("saving bio...");
             var self = this;
             console.log(self.items);
@@ -39,6 +40,7 @@ var app = new Vue({
         }
     },
     created: function () {
+        //get request to db on vue instance creation
         console.log("in mount");
         var self = this;
         $.ajax({
@@ -57,7 +59,7 @@ var app = new Vue({
 
 });
 
-
+//function to get Swapify ID cookie
 function getIDCookie() {
     var name = "SwapifyID=";
     var path = ",path=/";
