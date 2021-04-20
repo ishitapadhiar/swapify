@@ -79,6 +79,7 @@ function getIDCookie() {
 
 
 function addFriend() {
+    // This function is called when a user clicks the button to add a friend
     var remail = document.forms["friendForm"]["friendName"].value;
     if (remail == "") {
         alert("Email must be filled out.");
@@ -87,6 +88,7 @@ function addFriend() {
         id: getIDCookie()
     }
     $.ajax({
+        //calls user route to obtain the current user's email
         async: false,
         url: "/user",
         type: 'GET',
@@ -109,10 +111,12 @@ function addFriend() {
                 contentType: "application/json",
                 data: JSON.stringify(userData),
                 success: function() {
+                    //if adding a friend is successful
                     console.log("friend added");
                     alert("Friend added!");
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    //if adding a friend causes an error
                     alert("Error: User does not exist or user has already been added");
                 }
             });         
