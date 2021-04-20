@@ -12,6 +12,7 @@ from flask import redirect
 from urllib.parse import quote
 import json
 import spotipy
+from flask import jsonify
 
 os.environ['DBUSER'] = 'usxuxwby' 
 os.environ['DBPASS'] = 'sVUyUo4Z1aqH4MiKkLQtWlw8RNMhaq-H'
@@ -49,114 +50,18 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
-# @app.route('/')
-# @app.route('/login')
-# def log():
-#     scopes = "user-read-private user-read-email"
-#     my_client_id = "b167636c03db464bac2a9a61c6663685"
-#     my_redirect_uri = "http://localhost:5000/home"
-#     return redirect('https://accounts.spotify.com/authorize' +
-#   '?client_id=' + my_client_id +
-#   '&redirect_uri=' + my_redirect_uri +
-#   '&response_type=token')
-
-CLIENT_ID = "f38ef4e90a22440c85cc1e3333f3ef2e"
-CLIENT_SECRET = "276a9e798a504e35aa5eac1683b0cbb4"
-
-SPOTIFY_AUTH_URL = "https://accounts.spotify.com/authorize"
-SPOTIFY_TOKEN_URL = "https://accounts.spotify.com/api/token"
-SPOTIFY_API_BASE_URL = "https://api.spotify.com"
-API_VERSION = "v1"
-SPOTIFY_API_URL = "{}/{}".format(SPOTIFY_API_BASE_URL, API_VERSION)
-
-# Server-side Parameters
-CLIENT_SIDE_URL = "http://127.0.0.1"
-PORT = 8080
-REDIRECT_URI = "http://localhost:5000/callback/q"
-SCOPE = "playlist-modify-public user-read-private user-read-email user-read-currently-playing user-read-playback-state"
-STATE = ""
-SHOW_DIALOG_bool = True
-SHOW_DIALOG_str = str(SHOW_DIALOG_bool).lower()
-
-auth_query_parameters = {
-    "response_type": "code",
-    "redirect_uri": REDIRECT_URI,
-    "scope": SCOPE,
-    # "state": STATE,
-    # "show_dialog": SHOW_DIALOG_str,
-    "client_id": CLIENT_ID
-}
-
-@app.route("/")
-def index():
-    # Auth Step 1: Authorization
-    url_args = "&".join(["{}={}".format(key, quote(val)) for key, val in auth_query_parameters.items()])
-    auth_url = "{}/?{}".format(SPOTIFY_AUTH_URL, url_args)
-    return redirect(auth_url)
-
-@app.route("/callback/q")
-def callback():
-    # Auth Step 4: Requests refresh and access tokens
-    auth_token = request.args['code']
-    code_payload = {
-        "grant_type": "authorization_code",
-        "code": str(auth_token),
-        "redirect_uri": REDIRECT_URI,
-        'client_id': CLIENT_ID,
-        'client_secret': CLIENT_SECRET,
-    }
-    post_request = requests.post(SPOTIFY_TOKEN_URL, data=code_payload)
-
-    # Auth Step 5: Tokens are Returned to Application
-    response_data = json.loads(post_request.text)
-    access_token = response_data["access_token"]
-    refresh_token = response_data["refresh_token"]
-    token_type = response_data["token_type"]
-    expires_in = response_data["expires_in"]
-
-    # Auth Step 6: Use the access token to access Spotify API
-    authorization_header = {"Authorization": "Bearer {}".format(access_token)}
-
-    # Get profile data
-    user_profile_api_endpoint = "{}/me".format(SPOTIFY_API_URL)
-    profile_response = requests.get(user_profile_api_endpoint, headers=authorization_header)
-    profile_data = json.loads(profile_response.text)
-
-    # Get user playlist data
-    playlist_api_endpoint = "{}/playlists".format(profile_data["href"])
-    playlists_response = requests.get(playlist_api_endpoint, headers=authorization_header)
-    playlist_data = json.loads(playlists_response.text)
-
-    # Combine profile and playlist data to display
-    display_arr = [profile_data] + playlist_data["items"]
-    playlist_id = playlist_data['items'][0]['uri'].split(':')[2]
-    single_playlist_endpoint = "{}/{}/tracks".format(playlist_api_endpoint, playlist_id)
-    single_playlist_response = requests.get(single_playlist_endpoint, headers=authorization_header)
-    single_playlist_data = single_playlist_response.json()
-
-
-    
-
-    # #Get User Email and Song Info
-    email = display_arr[0]['email']
-    # single_info = single_playlist_data["items"][0]["track"]["album"]
-    # song_name = (single_info["name"])
-    # artist_name = (single_info["artists"][0]["name"])
-    # image = (single_info["images"][2]["url"])
-    # uri_link = (single_info["artists"][0]["uri"])
-    # artist_id = uri_link.split(':')[2]
-    # song_id = '1aEsTgCsv8nOjEgyEoRCpS' #hardcoded track id
-
-    endpoint = "https://api.spotify.com/v1/recommendations?seed_genres=pop"
-    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-    resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
-    length = resp_data['tracks'][0]['duration_ms']  
-    return render_template("about.html", auth=authorization_header, email=email, song_uri=new_uri, length= length)
-
-
-    # return render_template("about.html", auth=authorization_header, email=email, song_uri=song_id)
-
+@app.route('/')
+@app.route('/login')
+def log():
+    scopes = "user-read-private user-read-email playlist-modify-public"
+    my_client_id = "b167636c03db464bac2a9a61c6663685"
+    my_redirect_uri = "http://localhost:5000/home"
+    show_dialogs = 'true'
+    return redirect('https://accounts.spotify.com/authorize' +
+  '?client_id=' + my_client_id +
+  '&redirect_uri=' + my_redirect_uri +
+  '&response_type=token' +
+  '&show_dialog='+show_dialogs)
 
 
 @app.route('/home')
@@ -207,38 +112,50 @@ def profile():
     )
 
 @app.route('/user', methods = ['POST', 'GET', 'PUT'])
-def user(form):
+def user():
+    print("message recieved")
+    print(request)
     # frontend, add form parsing here, you need to send first name, 
     # last name and email to create a new user
-    spotify_auth = None
     if request.method == 'POST':
-        u1 = User.query.filter_by(email=email).first()
-        if u1 is None:
-            u1 = User(first, last, email, spotify_auth)
+        rspotify_auth = request.json['token']
+        remail = request.json['email']
+        rname = request.json['display_name']
+        u1 = User.query.filter_by(email=remail).first()
+        if u1 is None: #user not in db
+            u1 = User(rname, rname, remail, rspotify_auth)
             db.session.add(u1)
             db.session.commit()
-
-    if request.method == 'GET':
-        u1 = User.query.filter_by(email=email).first()
+        else: #updating
+            #overwrite the spotify auth
+            u1.spotify_auth = rspotify_auth
+            if 'bio' in request.json: 
+                rbio = request.json['bio']
+                u1.bio = rbio
+            db.session.commit()
+        u1 = User.query.filter_by(email=remail).first()    
+        #should pass back an id for front end to make a cookie
         return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
             email=u1.email,
             spotify_auth= u1.spotify_auth,
-            id= u1.id
+            id= u1.id,
+            bio=u1.bio
         )
-
-    if request.method == 'PUT':
-        u1 = User.query.filter_by(email=email).first()
-        # add the changedFields dictionary by parsing the object from the function
-        if 'first' in changedFields.keys():
-            u1.first_name = changedFields['first']
-        if 'last' in changedFields.keys():
-            u1.last_name = changedFields['last']
-        if 'auth' in changedFields.keys():
-            u1.spotify_auth = changedFields['auth']
-            
-        db.session.commit()
+    elif request.method == 'GET':
+        #request the user row using id from cookie
+        print(request.args)
+        rid = request.args.get('id')
+        u1 = User.query.filter_by(id=rid).first()
+        return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id,
+            bio = u1.bio
+        )
 
     return u1
 
@@ -248,27 +165,13 @@ def addFriend():
     # user that they want to add as a friend (u2_email)
     if request.method == 'POST':
         #gets friend's email; should check if it's valid
-        friend = request.form['friendName']
+        u1_email = request.json['userEmail']
+        u2_email = request.json['friendEmail']
     u1 = User.query.filter_by(email=u1_email).first()
     u2 = User.query.filter_by(email=u2_email).first()
     u1.friended.append(u2)
     db.session.commit()
-
-# removing this function, and it is incorrect, this is done through the PUT method, I 
-# have included one for users in the user route/function (line 100)     
-
-# @app.route('/editProfile', methods=['POST'])
-# def editProfile():
-#     #If user updates name, email, or bio in profile settings
-#     if request.method == 'POST':
-#         first = request.form['first']
-#         last = request.form['last']
-#         bio = request.form['bio']
-#         return render_template(
-#             'profile.html',
-#             bio = bio
-#         )
-
+    return jsonify( first_name=u1.first_name )
 
 @app.route('/newSong', methods=['POST'])
 def addSong(form):
@@ -328,34 +231,14 @@ def addPlaylist(form):
     db.session.commit()
     return p1
 
-
-@app.route('/nextSong', methods=['GET'])
-def nextSong(token, email, uri):
-    token = request.form['token']
-    email = request.form['email']
-    uri = request.form['uri']
-
-    access_token = token.split('Bearer ')
-    access_token = (access_token[1][:len(access_token)-4])
-    headers = {"Authorization": f"Bearer {access_token}"}
-    endpoint = "https://api.spotify.com/v1/recommendations?seed_genres=pop"
-    response = requests.get(endpoint, headers={"Authorization": f"Bearer {access_token}"})
-    resp_data = response.json()
-    new_uri = (resp_data['tracks'][0]['uri'].split(":")[2])
-    length = resp_data['tracks'][0]['duration_ms']  
-    return render_template("about.html", auth=headers, email=email, song_uri=new_uri, length= length)
-
-
 @app.route('/addHappySong', methods=['POST'])
 def addHappySong():
-    
     #frontend add form parsing you need user email, and spotify_id for the song
-    token = request.form['token']
-    email = request.form['email']
-    uri = request.form['uri']
-    length = round(int(request.form['length']) / 60000)
-    print(type(int(length)))
-
+    token = request.json['token']
+    email = request.json['email']
+    uri = request.json['uri']
+    length = request.json['length']
+    # print("email", email)
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -366,59 +249,78 @@ def addHappySong():
     u1.happy_music.append(s1)
     db.session.commit()
 
-    return nextSong(token, email, uri)
+    return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id,
+            bio=u1.bio
+        )
     
 
 
 @app.route('/addSadSong', methods=['POST'])
 def addSadSong():
     #frontend add form parsing you need user email, and spotify_id for the song
-    token = request.form['token']
-    email = request.form['email']
-    uri = request.form['uri']
-    print(type(request.form['length']))
-    length = round(int(request.form['length']) / 60000)
-    
+    token = request.json['token']
+    email = request.json['email']
+    uri = request.json['uri']
+    length = request.json['length']
+    spotify_id=uri
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
+    print(spotify_id)
     if s1 is None:
         s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
     
     u1.sad_music.append(s1)
-    db.session.commit()   
-
-    return nextSong(token, email, uri)
+    db.session.commit()    
+    return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id,
+            bio=u1.bio
+        )
 
 @app.route('/addStudySong', methods=['POST'])
 def addStudySong():
     #frontend add form parsing you need user email, and spotify_id for the song
-    token = request.form['token']
-    email = request.form['email']
-    uri = request.form['uri']
-    length = round(int(request.form['length']) / 60000)
-
+    token = request.json['token']
+    email = request.json['email']
+    uri = request.json['uri']
+    length = request.json['length']
+    spotify_id=uri
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
         s1 = Song(uri, length)
         db.session.add(s1)
         db.session.commit()
-
+    
     u1.study_music.append(s1)
     db.session.commit()
-    
-    return  nextSong(token, email, uri)
+    return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id,
+            bio=u1.bio
+        )
 
 @app.route('/addPartySong', methods=['POST'])
 def addPartySong():
     #frontend add form parsing you need user email, and spotify_id for the song
-    token = request.form['token']
-    email = request.form['email']
-    uri = request.form['uri']
-    length = round(int(request.form['length']) / 60000)
-
+    token = request.json['token']
+    email = request.json['email']
+    uri = request.json['uri']
+    length = request.json['length']
+    spotify_id=uri
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
     if s1 is None:
@@ -429,7 +331,14 @@ def addPartySong():
     u1.party_music.append(s1)
     db.session.commit()
 
-    return nextSong(token, email, uri)
+    return jsonify(
+            first_name=u1.first_name,
+            last_name=u1.last_name,
+            email=u1.email,
+            spotify_auth= u1.spotify_auth,
+            id= u1.id,
+            bio=u1.bio
+        )
 
 if __name__ == '__main__':
     app.debug = True
