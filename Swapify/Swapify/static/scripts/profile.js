@@ -75,8 +75,59 @@ function getIDCookie() {
     return "";
 }
 
+
+function addFriend() {
+    var remail = document.forms["friendForm"]["friendName"].value;
+    // e.preventDefault();
+
+    if (remail == "") {
+        alert("Email must be filled out.");
+        // return false;
+      }
+      var tdata = {
+        id: getIDCookie()
+    }
+    $.ajax({
+        async: false,
+        url: "/user",
+        type: 'GET',
+        dataType: "json",
+        contentType: "application/json",
+        data: tdata,
+        success: function (data) {
+            console.log(data);
+            var userData = {
+                //all the data that will be used in the flask route
+                userEmail: data.email,
+                friendEmail: remail
+            }
+            console.log(userData);
+                    
+            $.ajax({
+                async: false,
+                url: "/addFriend",
+                type: 'POST',
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify(userData),
+                success: function() {
+                    console.log("friend added");
+                    alert("Friend added!");
+                    // return true;
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    alert("Error: User does not exist or user has already been added");
+                    // return false;
+                }
+            });         
+        }
+    });
+    // e.preventDefault();
+
+}
+
 $(function () {
-    console.log("MY id is: " + getIDCookie())
+    console.log("My id is: " + getIDCookie())
 
     
 })
