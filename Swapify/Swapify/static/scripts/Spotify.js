@@ -31,7 +31,7 @@ function getProfileInformation() {
         var tdata = {
             token: ACCESS_TOKEN,
             display_name: json.display_name,
-            email: json.email,
+            email: json.id,
 
         }
         //request to save user in datatable
