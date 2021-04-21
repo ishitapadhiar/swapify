@@ -184,18 +184,20 @@
             box-shadow: 0 0 0 2px var(--colorShadeB), 0 0.25em 0 0 var(--colorShadeB);
         }
     </style>
-    <body>
+    <body style="justify-content: center">
         <script src="/static/scripts/match.js"></script>
         <!-- Search bar -->
         <!--<input style="margin-top: 60px; margin-bottom: 25px" type="search" placeholder="Search..">-->
         <div style="padding-top: 120px;">
+        <p align="center">
             <!-- Music player and related information -->
-            <iframe id="songPlayer" width="400" height="480" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <iframe id="songPlayer" width="400" height="480" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> 
+        </p>
             <p hidden id="length"></p>
             <p hidden id="genre">pop</p>
         </div>
 
-        <div class="tcontrols" style="margin-top: 5px;">
+        <div class="tcontrols" style="margin-left: 130px;">
             <!-- All four mood buttons -->
             <div class="tyes btn">
                 <!-- happy song playlist -->
@@ -216,7 +218,7 @@
                 <i class="fas fa-birthday-cake" onclick="addSong('party');" style="margin-left: -15px;" aria-hidden="true"></i>
             </div>
         </div>
-        <div style="padding-top: 80px">
+        <div style="padding-top: 80px; padding-bottom: 80px; margin-left: 80px;">
             <!-- Genre buttons -->
             <button class="big-button" style="height:80px;" onclick="addGenre('pop')">POP</button>
             <button class="big-button" style="height:80px;" onclick="addGenre('rock')">ROCK</button>
