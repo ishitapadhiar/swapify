@@ -199,6 +199,47 @@ def user():
 
     return u1
 
+@app.route('/getMoodPlaylist', methods=['GET'])
+def getMoodPlaylist():
+    rid = request.args.get('id')
+    u1 = User.query.filter_by(id=rid).first()
+    happysongs = []
+    sadsongs = []
+    studysongs = []
+    partysongs = []
+
+    allusers = [u1]
+    for friendID in u1.friended:
+        allUsers.append(db.session.query(User).get(friendID))
+        print(friendID)
+
+    for u in allusers:
+        for song in u.happy_music:
+            happysongs.append(song.spotify_id)
+            print("added song")
+        for song in u.sad_music:
+            sadsongs.append(song.spotify_id)
+        for song in u.study_music:
+            studysongs.append(song.spotify_id)
+
+    for song in u1.party_music:
+        partysongs.append(song.spotify_id)
+    return jsonify(
+        first_name=u1.first_name,
+        last_name=u1.last_name,
+        email=u1.email,
+        spotify_auth= u1.spotify_auth,
+        id= u1.id,
+        bio = u1.bio,
+        happysongs = happysongs,
+        sadsongs = sadsongs,
+        studysongs = studysongs,
+        partysongs = partysongs
+    )
+
+    return u1
+
+
 @app.route('/addFriend', methods=['POST'])
 def addFriend():
     # frontend add form parsing here, get the email of the current user (u1_email) and the 
