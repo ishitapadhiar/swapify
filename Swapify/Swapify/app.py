@@ -138,22 +138,18 @@ def user():
         u1 = User.query.filter_by(email=remail).first()
         happysongs = []
         for song in u1.happy_music:
-            print(song.spotify_id)
             happysongs.append(song.spotify_id)
 
         sadsongs = []
         for song in u1.sad_music:
-            print(song.spotify_id)
             sadsongs.append(song.spotify_id)
 
         studysongs = []
         for song in u1.study_music:
-            print(song.spotify_id)
             studysongs.append(song.spotify_id)
 
         partysongs = []
         for song in u1.party_music:
-            print(song.spotify_id)
             partysongs.append(song.spotify_id)
 
         #should pass back an id for front end to make a cookie
@@ -164,7 +160,10 @@ def user():
             spotify_auth= u1.spotify_auth,
             id= u1.id,
             bio=u1.bio,
-            happysongs = happysongs
+            happysongs = happysongs,
+            sadsongs = sadsongs,
+            studysongs = studysongs,
+            partysongs = partysongs
         )
     elif request.method == 'GET':
         #request the user row using id from cookie
@@ -173,8 +172,18 @@ def user():
         u1 = User.query.filter_by(id=rid).first()
         happysongs = []
         for song in u1.happy_music:
-            print(song.spotify_id)
             happysongs.append(song.spotify_id)
+        sadsongs = []
+        for song in u1.sad_music:
+            sadsongs.append(song.spotify_id)
+
+        studysongs = []
+        for song in u1.study_music:
+            studysongs.append(song.spotify_id)
+
+        partysongs = []
+        for song in u1.party_music:
+            partysongs.append(song.spotify_id)
         return jsonify(
             first_name=u1.first_name,
             last_name=u1.last_name,
@@ -182,7 +191,10 @@ def user():
             spotify_auth= u1.spotify_auth,
             id= u1.id,
             bio = u1.bio,
-            happysongs = happysongs
+            happysongs = happysongs,
+            sadsongs = sadsongs,
+            studysongs = studysongs,
+            partysongs = partysongs
         )
 
     return u1
@@ -300,7 +312,6 @@ def addSadSong():
     spotify_id=uri
     u1 = User.query.filter_by(email=email).first()
     s1 = Song.query.filter_by(spotify_id=uri).first()
-    print(spotify_id)
     if s1 is None:
         s1 = Song(uri, length)
         db.session.add(s1)

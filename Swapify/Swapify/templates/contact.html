@@ -209,17 +209,29 @@ body {
     <h1 style="padding-top: 100px;">
     Your Playlists
    </h1>
-          <script src="/static/scripts/match.js"></script>
+          <script src="/static/scripts/playlist.js"></script>
 
         <div style="padding-top: 10px">
-            <!-- Genre buttons -->
-            <button href = "{{ url_for('generateNewPlaylist', playlist=happy) }}" class="big-button" style="height:80px; padding-top: 10px" onclick="">Generate Happy Playlist</button>
-            <button href = "{{ url_for('generateNewPlaylist', playlist=sad) }}" class="big-button" style="height:80px; padding-top: 10px" onclick="">Generate Sad Playlist</button>
-            <button href = "{{ url_for('generateNewPlaylist', playlist=study) }}" class="big-button" style="height:80px; padding-top: 10px" onclick="">Generate Study Playlist</button>
-            <button href = "{{ url_for('generateNewPlaylist', playlist=party) }}" class="big-button" style="height:80px; padding-top: 10px" onclick="">Generate Party Playlist</button>
+            <!-- Generate playlist buttons -->
+            <!-- function would be getPlaylist('happy') -->
+            <button onclick = "displayPlaylist('happy')" class="big-button" style="height:80px; padding-top: 10px">Generate Happy Playlist</button>
+            <button onclick = "displayPlaylist('sad')" class="big-button" style="height:80px; padding-top: 10px">Generate Sad Playlist</button>
+            <button onclick="displayPlaylist('study')" class="big-button" style="height:80px; padding-top: 10px" >Generate Study Playlist</button>
+            <button onclick="displayPlaylist('party')" class="big-button" style="height:80px; padding-top: 10px">Generate Party Playlist</button>
 
 
-        </div>
+        <div style="padding-top: 125px">
+      </div>
+      <h1 id = "title_playlist">
+      </h1>
+        <!-- Here the items for songs are displayed -->
+
+        <ul id = "playlist"> 
+
+
+        </ul>
+
+
 
 
  	
