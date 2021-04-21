@@ -13,11 +13,11 @@
 </head>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> <!--NEEDED for ajax, not from layout extension? TODO-->
 <div>
-    <div class="row" style="margin-top:100px">
+    <div class="row" style="margin-top:70px">
         <!-- Row for adding friend information -->
-        <div class="col-md-6">
+        <!-- <div class="col-md-6">
             <div class="image"> <img style="width:75px;" src="https://startupheretoronto.com/wp-content/uploads/2017/02/evp.vcdefault-user-image-f0acd9b4b5136ca7fccb2fe76e52526a24e68695.png" class="rounded-circle"> <span><i class='bx bxs-camera-plus'></i></span> </div>
-        </div>
+        </div> -->
         <div class="col-md-6">
             <!--<button class="px-3 btn btn-sm btn-outline-primary" style="margin-top:10px;">
         <i class="fas fa-user-friends"></i> View Friends
@@ -38,7 +38,7 @@
                         <div class="modal-body">
                             <div class="inputs">
                                 <form name="friendForm" action="#" method="GET">
-                                    <label style="color: black">Enter Friend's Spotify Email</label>
+                                    <label style="color: black">Enter Friend's Spotify ID</label>
                                     <input class="form-control inputs" type="text" name="friendName">
                                     <br>
                                     <input class="btn btn-primary" onclick="addFriend(this.form)" type="submit" value="Submit">
@@ -56,7 +56,7 @@
     <br>
     <br />
     <div id="profile">
-        <div class="row" style="margin-top: 20px">
+        <div class="row" style="margin-top: 0px">
             <div class="col-md-6">
                 <h4>Name: [[items.first_name]]</h4>
                 <h4>Email: [[items.email]]</h4>
