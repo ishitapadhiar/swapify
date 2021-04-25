@@ -13,6 +13,7 @@ from urllib.parse import quote
 import json
 import spotipy
 from flask import jsonify
+from flask import Blueprint
 
 os.environ['DBUSER'] = 'usxuxwby' 
 os.environ['DBPASS'] = 'sVUyUo4Z1aqH4MiKkLQtWlw8RNMhaq-H'
@@ -27,6 +28,7 @@ database_uri = 'postgresql+psycopg2://{dbuser}:{dbpass}@{dbhost}/{dbname}'.forma
 )
 
 app = Flask(__name__)
+
 
 app.config.update(
     SQLALCHEMY_DATABASE_URI=database_uri,
@@ -50,8 +52,15 @@ manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
-@app.route('/')
-@app.route('/login')
+nav_bp = Blueprint("nav_bp", __name__)
+music_bp = Blueprint("music_bp",__name__)
+profile_bp = Blueprint("profile_bp",__name__)
+
+#from Swapify.music import music_bp
+
+
+@profile_bp.route('/')
+@profile_bp.route('/login')
 def log():
     scopes = "user-read-private user-read-email playlist-modify-public"
     my_client_id = "b167636c03db464bac2a9a61c6663685"
@@ -63,8 +72,8 @@ def log():
   '&response_type=token' +
   '&show_dialog='+show_dialogs)
 
-
-@app.route('/home')
+#==============================navbar main page routes==========================
+@nav_bp.route('/home')
 def home():
     # testFriends()
     # print("friends tested")
@@ -76,32 +85,32 @@ def home():
     )
 
 #Genre routes
-@app.route('/genre')
+@nav_bp.route('/genre')
 def genre():
     return render_template('genre.html')
 
-@app.route('/about')
-def about():
+@nav_bp.route('/mood')
+def mood():
     """Renders the mood page."""
 
     return render_template(
-        'about.html',
+        'mood.html',
         title='Mood Page',
         song_uri = '1aEsTgCsv8nOjEgyEoRCpS', #hardcoded track id,
         length = 3
     )
 
-@app.route('/contact')
-def contact():
+@nav_bp.route('/playlists')
+def playlists():
     """Renders the playlist page."""
     return render_template(
-        'contact.html',
+        'playlists.html',
         title='Playlists Page',
         year=datetime.now().year,
         message='Your playlist page. This message is in views.py'
     )
 
-@app.route('/profile')
+@nav_bp.route('/profile')
 def profile():
     """Renders the profile page."""
     return render_template(
@@ -111,9 +120,9 @@ def profile():
         message='Settings'
     )
 
+#========================end top navbar routes===================================
 
-
-@app.route('/user', methods = ['POST', 'GET', 'PUT'])
+@profile_bp.route('/user', methods = ['POST', 'GET', 'PUT'])
 def user():
     print("message recieved")
     print(request)
@@ -199,7 +208,7 @@ def user():
 
     return u1
 
-@app.route('/getMoodPlaylist', methods=['GET'])
+@music_bp.route('/getMoodPlaylist', methods=['GET'])
 def getMoodPlaylist():
     rid = request.args.get('id')
     u1 = User.query.filter_by(id=rid).first()
@@ -240,7 +249,7 @@ def getMoodPlaylist():
     return u1
 
 
-@app.route('/addFriend', methods=['POST'])
+@profile_bp.route('/addFriend', methods=['POST'])
 def addFriend():
     # frontend add form parsing here, get the email of the current user (u1_email) and the 
     # user that they want to add as a friend (u2_email)
@@ -254,7 +263,7 @@ def addFriend():
     db.session.commit()
     return jsonify( first_name=u1.first_name )
 
-@app.route('/newSong', methods=['POST'])
+@music_bp.route('/newSong', methods=['POST'])
 def addSong(form):
     #frontend add form parsing here, you need a unique identifier from spotify (spotify_id)
     #convert length to integer by rounding to the closest possible minute.
@@ -263,7 +272,7 @@ def addSong(form):
     db.session.commit()
     return s1
 
-@app.route('/generateNewPlaylist', methods=['POST'])
+@music_bp.route('/generateNewPlaylist', methods=['POST'])
 def generateNewPlaylist(form):
     #frontend add form parsing you need playlist name, length and user_id
     token = request.form['token']
@@ -279,7 +288,7 @@ def generateNewPlaylist(form):
     generator.generate_user_playlist(name, mood, friends, time, numSongs)
 
 
-@app.route('/getPlaylist', methods=['GET'])
+@music_bp.route('/getPlaylist', methods=['GET'])
 def getPlaylist(form):
     email = request.form['email']
     playlistName = request.form['playlistName']
@@ -305,15 +314,7 @@ def getPlaylist(form):
 
 
 
-@app.route('/', methods=['POST'])
-def addPlaylist(form):
-    #frontend add form parsing you need playlist name, length and user_id
-    p1 = Playlist(name, length, user_id)
-    db.session.add(p1)
-    db.session.commit()
-    return p1
-
-@app.route('/addHappySong', methods=['POST'])
+@music_bp.route('/addHappySong', methods=['POST'])
 def addHappySong():
     #frontend add form parsing you need user email, and spotify_id for the song
     token = request.json['token']
@@ -343,7 +344,7 @@ def addHappySong():
     
 
 
-@app.route('/addSadSong', methods=['POST'])
+@music_bp.route('/addSadSong', methods=['POST'])
 def addSadSong():
     #frontend add form parsing you need user email, and spotify_id for the song
     token = request.json['token']
@@ -369,7 +370,7 @@ def addSadSong():
             bio=u1.bio
         )
 
-@app.route('/addStudySong', methods=['POST'])
+@music_bp.route('/addStudySong', methods=['POST'])
 def addStudySong():
     #frontend add form parsing you need user email, and spotify_id for the song
     token = request.json['token']
@@ -395,7 +396,7 @@ def addStudySong():
             bio=u1.bio
         )
 
-@app.route('/addPartySong', methods=['POST'])
+@music_bp.route('/addPartySong', methods=['POST'])
 def addPartySong():
     #frontend add form parsing you need user email, and spotify_id for the song
     token = request.json['token']
@@ -421,6 +422,10 @@ def addPartySong():
             id= u1.id,
             bio=u1.bio
         )
+
+app.register_blueprint(nav_bp)
+app.register_blueprint(music_bp)
+app.register_blueprint(profile_bp)
 
 if __name__ == '__main__':
     app.debug = True
