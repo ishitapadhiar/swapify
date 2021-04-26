@@ -33,7 +33,7 @@ deactivate (quit the virtual environment)
 ```
 
 **6. Troubleshooting:**
-- If you are getting a  ModuleNotFoundError: No module named ‘...’, do a sudo pip3 install ___ , where the blank is the missing module
+- If you are getting a  ModuleNotFoundError: No module named ‘___’, do a sudo pip3 install ___ , where the blank is the missing module
 - If you are getting a flask app error, try setting the environment variable
 
 
